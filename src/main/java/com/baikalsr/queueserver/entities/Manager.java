@@ -6,11 +6,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class User implements UserDetails {
+public class Manager implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,8 +36,8 @@ public class User implements UserDetails {
     @JoinColumn(name = "queue_id")
     private Queue queue;
 
-    @ManyToMany(mappedBy = "ticketService_id", fetch = FetchType.EAGER)
-    private Set<TicketService> ticketServices;
+    @ManyToMany(mappedBy = "managers", fetch = FetchType.EAGER)
+    private List<TicketService> ticketServices;
 
     @Override
     public boolean isAccountNonExpired()
@@ -73,13 +74,13 @@ public class User implements UserDetails {
     {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return isActive() == user.isActive() &&
-                Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getUsername(), user.getUsername()) &&
-                Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getName(), user.getName()) &&
-                Objects.equals(getRoles(), user.getRoles());
+        Manager manager = (Manager) o;
+        return isActive() == manager.isActive() &&
+                Objects.equals(getId(), manager.getId()) &&
+                Objects.equals(getUsername(), manager.getUsername()) &&
+                Objects.equals(getPassword(), manager.getPassword()) &&
+                Objects.equals(getName(), manager.getName()) &&
+                Objects.equals(getRoles(), manager.getRoles());
     }
 
     @Override

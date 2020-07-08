@@ -3,7 +3,7 @@ package com.baikalsr.queueserver.entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class TicketService {
@@ -16,6 +16,7 @@ public class TicketService {
 
     private int priority;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<User> users;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "users_id")
+    private List<Manager> managers;
 }

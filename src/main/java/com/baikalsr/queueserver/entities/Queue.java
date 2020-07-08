@@ -3,7 +3,7 @@ package com.baikalsr.queueserver.entities;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Queue {
@@ -25,18 +25,19 @@ public class Queue {
     @JoinColumn(name = "kioskMenu_id")
     private KioskMenu kioskMenu;
 
-    private Set<User> users;
+    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Manager> managers;
 
-    @OneToOne(mappedBy = "queue_id")
+    @OneToOne(mappedBy = "queue")
     private Numerator numerator;
 
-    @OneToMany(mappedBy = "queue_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    public Set<User> getUsers() {
-        return users;
+
+    public List<Manager> getManagers() {
+        return managers;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setManagers(List<Manager> managers) {
+        this.managers = managers;
     }
 
     public void setId(int id) {

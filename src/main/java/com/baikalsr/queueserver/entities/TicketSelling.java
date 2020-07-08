@@ -11,6 +11,6 @@ public class TicketSelling {
     private String sellingNumber;
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id")
+    @JoinColumn(name = "ticket")
     private Ticket ticket;
 }

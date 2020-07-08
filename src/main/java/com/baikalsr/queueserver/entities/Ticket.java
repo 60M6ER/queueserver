@@ -37,6 +37,6 @@ public class Ticket {
     @JoinColumn(name = "reason_id")
     private Reason reason;
 
-    @OneToMany(mappedBy = "ticket_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketSelling> ticketSellings;
 }

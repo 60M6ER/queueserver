@@ -4,19 +4,19 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class UserStatus {
+public class ManagersStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private int window;
+    private int casement;
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
 }
