@@ -2,18 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a8b24ef-3582-46cc-974b-94c8a8878230" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/UserStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/Application.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +177,7 @@
       <workItem from="1594039212985" duration="222000" />
       <workItem from="1594039483614" duration="655000" />
       <workItem from="1594101175755" duration="15422000" />
-      <workItem from="1594194978356" duration="6207000" />
+      <workItem from="1594194978356" duration="8869000" />
     </task>
     <servers />
   </component>

@@ -43,4 +43,12 @@ public class Kiosk {
     public Queue getQueue() {
         return queue;
     }
+
+    public void setIP(String IP) {
+        this.IP = IP;
+    }
+
+    public String getIP() {
+        return IP;
+    }
 }

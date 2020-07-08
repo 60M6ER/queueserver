@@ -87,4 +87,12 @@ public class Queue {
     public KioskMenu getKioskMenu() {
         return kioskMenu;
     }
+
+    public Numerator getNumerator() {
+        return numerator;
+    }
+
+    public void setNumerator(Numerator numerator) {
+        this.numerator = numerator;
+    }
 }

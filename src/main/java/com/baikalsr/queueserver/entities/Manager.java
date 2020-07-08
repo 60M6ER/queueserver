@@ -142,4 +142,20 @@ public class Manager implements UserDetails {
     public Set<Role> getRoles() {
         return roles;
     }
+
+    public Queue getQueue() {
+        return queue;
+    }
+
+    public void setQueue(Queue queue) {
+        this.queue = queue;
+    }
+
+    public List<TicketService> getTicketServices() {
+        return ticketServices;
+    }
+
+    public void setTicketServices(List<TicketService> ticketServices) {
+        this.ticketServices = ticketServices;
+    }
 }
