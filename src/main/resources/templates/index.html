@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>"Электронная очередь Байкал-сервис"</title>
+</head>
+<body>
+<div class="headSite" align="center">
+    <h1 th:text="'Привет, ' + ${nameUser} + '!'">Привет, Гость!</h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти"/>
+    </form>
+</div>
+
+<div align="center">
+    <div align="left">
+        <a href="settings"
+           th:if="${isAdministrator}">Настройки</a>
+    </div>
+</div>
+
+</body>
+</html>

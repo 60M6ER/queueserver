@@ -2,17 +2,55 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a8b24ef-3582-46cc-974b-94c8a8878230" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UIEditEntities.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UISettings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/config/MvcConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/ManagerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/WebController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/KioskRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/ManagerRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/QueueRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/AuthProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/StartLogic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/kiosk.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/registration.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/user.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/queueserver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/queueserver.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Kiosk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/KioskMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Manager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/ManagersStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Numerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Queue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Reason.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Status.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketSelling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Kiosk.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/KioskMenu.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Manager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/ManagersStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Numerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Queue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Reason.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Role.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Ticket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketSelling.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketStatus.class" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,20 +116,30 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="HTML File" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="1eJUUrisTWPkIroWOu2DScYVtlb" />
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="postgresql" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/templates" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -109,7 +157,12 @@
       <recent name="com.baikalsr.queueserver" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Queue\queueserver\queueserver\src\main\resources\templates" />
       <recent name="D:\Queue\queueserver — копия" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.baikalsr.queueserver.repository" />
+      <recent name="com.baikalsr.queueserver.service" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Queue\queueserver\queueserver\src\main\resources" />
@@ -129,7 +182,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.baikalsr.queueserver.Application" />
       <module name="queueserver" />
@@ -139,6 +192,13 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="queueserver" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.baikalsr.queueserver.Application" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,6 +217,11 @@
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
               <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@59cc5279" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@59cc5279" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4927946f" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -177,7 +242,8 @@
       <workItem from="1594039212985" duration="222000" />
       <workItem from="1594039483614" duration="655000" />
       <workItem from="1594101175755" duration="15422000" />
-      <workItem from="1594194978356" duration="8869000" />
+      <workItem from="1594194978356" duration="27990000" />
+      <workItem from="1594367201878" duration="10249000" />
     </task>
     <servers />
   </component>

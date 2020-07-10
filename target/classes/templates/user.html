@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'QBS: ' + ${manager.getName()}">Настройки пользователя</title>
+    <style>
+        select {
+            width: 300px; /* Ширина списка в пикселах */
+        }
+    </style>
+</head>
+<body>
+<div align="left">
+    <form name="userSet" th:action="@{/settings/saveUser}" th:object="${manager}"  method="post">
+        <table>
+            <tr>
+                <td align="right">Логин (Active Directory):</td>
+                <td align="left">
+                    <input type="text" th:value="${manager.getLoginAD()}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Ф. И. О.:</td>
+                <td align="left">
+                    <input type="text" th:value="${manager.getName()}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Активный:</td>
+                <td align="left">
+                    <input type="checkbox" th:checked="${manager.isActive()}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Очередь:</td>
+                <td align="left">
+                    <select name="select" th:field="*{queue}">
+                        <option th:each="cqueue : ${queues}"
+                                th:value="${cqueue.getId()}"
+                                th:utext="${cqueue.getName()}"/>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>Оказываемые услуги:</td></tr>
+            <tr><td>
+                <table border="1px">
+                    <tr>
+                        <td th:each="service : ${manager.getTicketServices()}"
+                        th:text="${service.getName()}"></td>
+                    </tr>
+                </table>
+            </td></tr>
+            <tr><td>Роли пользователя:</td></tr>
+            <tr><td>
+                <table border="1px">
+                    <tr>
+                        <td th:each="role : ${manager.getRoles()}"
+                            th:text="${role.name()}"></td>
+                    </tr>
+                </table>
+            </td></tr>
+            <tr>
+                <td align="right"><input type="submit" value="Сохранить"></td>
+                <td align="left">
+                    <a href="/settings?currentSet=Users">Отмена</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>
