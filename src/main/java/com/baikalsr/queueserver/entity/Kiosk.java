@@ -1,7 +1,6 @@
-package com.baikalsr.queueserver.entities;
+package com.baikalsr.queueserver.entity;
 
 import com.sun.istack.NotNull;
-import org.hibernate.validator.constraints.Mod10Check;
 
 import javax.persistence.*;
 

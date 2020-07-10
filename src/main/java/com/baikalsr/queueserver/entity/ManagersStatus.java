@@ -1,4 +1,4 @@
-package com.baikalsr.queueserver.entities;
+package com.baikalsr.queueserver.entity;
 
 import javax.persistence.*;
 import java.util.Date;

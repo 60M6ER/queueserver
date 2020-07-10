@@ -1,6 +1,6 @@
-package com.larionov.converter.services;
+package com.baikalsr.queueserver.service;
 
-import com.larionov.converter.entities.User;
+import com.baikalsr.queueserver.entity.Manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,7 +26,7 @@ public class AuthProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        User user = (User) userService.loadUserByUsername(username);
+        Manager user = (Manager) userService.loadUserByUsername(username);
 
         if(user != null && (user.getUsername().equals(username) || user.getName().equals(username)))
         {

@@ -1,4 +1,4 @@
-package com.baikalsr.queueserver.entities;
+package com.baikalsr.queueserver.entity;
 
 public enum  TicketStatus {
 

@@ -1,4 +1,4 @@
-package com.larionov.converter.config;
+package com.baikalsr.queueserver.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

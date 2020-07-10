@@ -1,4 +1,4 @@
-package com.baikalsr.queueserver.entities;
+package com.baikalsr.queueserver.entity;
 
 import com.sun.istack.NotNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -128,7 +128,7 @@ public class Manager implements UserDetails {
 
     @Override
     public String getUsername() {
-        return loginAD;
+        return getLoginAD();
     }
 
     public String getName() {
