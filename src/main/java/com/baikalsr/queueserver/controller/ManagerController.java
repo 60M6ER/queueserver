@@ -25,10 +25,12 @@ public class ManagerController {
     public String userSet(Model model, @RequestParam Long id){
 
         manager = managerRepo.getOne(id);
+
         model.addAttribute("manager", manager);
         model.addAttribute("queues", queueRepo.findAll());
+        model.addAttribute("fields", manager.getFields());
 
-        return "user";
+        return "kiosk";
     }
 
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST)

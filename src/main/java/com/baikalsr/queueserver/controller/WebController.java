@@ -51,7 +51,7 @@ public class WebController {
 
     @RequestMapping("/settings")
     public String settings(Model model, @RequestParam(required = false) String currentSet){
-        if (currentSet != null)
+        if (currentSet != null) {
             if (currentSet.equals("Users")) {
                 List<Manager> managers = managerRepo.findAll();
                 model.addAttribute("Users", managers);
@@ -62,6 +62,7 @@ public class WebController {
                 model.addAttribute("Kiosks", kiosks);
                 model.addAttribute("currentSet", currentSet);
             }
+        }
         return "settings";
     }
 }

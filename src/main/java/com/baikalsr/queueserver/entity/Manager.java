@@ -1,17 +1,18 @@
 package com.baikalsr.queueserver.entity;
 
+import com.baikalsr.queueserver.UI.TableEditor;
+import com.baikalsr.queueserver.UI.UIEditEntities;
+import com.baikalsr.queueserver.UI.editorImpl.FieldsObject;
+import com.baikalsr.queueserver.UI.editorImpl.TypeField;
 import com.sun.istack.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-public class Manager implements UserDetails {
+public class Manager implements UserDetails, UIEditEntities {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -38,6 +39,54 @@ public class Manager implements UserDetails {
 
     @ManyToMany(mappedBy = "managers", fetch = FetchType.EAGER)
     private List<TicketService> ticketServices;
+
+    @Override
+    public ArrayList<HashMap<String, Object>> getFields() {
+        ArrayList<HashMap<String, Object>> fields = new ArrayList<>();
+
+        HashMap<String, Object> structField = new HashMap<>();
+
+        structField.put("name", "Логин (Active Directory):");
+        structField.put("type", 0);
+        fields.add(structField);
+
+        structField = new HashMap<>();
+        structField.put("name", "Ф. И. О.:");
+        structField.put("type", 0);
+        fields.add(structField);
+
+        structField = new HashMap<>();
+        structField.put("name", "Активный:");
+        structField.put("type", 1);
+        fields.add(structField);
+
+        structField = new HashMap<>();
+        structField.put("name", "Очередь:");
+        structField.put("type", 2);
+        fields.add(structField);
+
+        return fields;
+    }
+
+
+    @Override
+    public Object getField(int i) {
+        switch (i){
+            case 0:
+                return this.getLoginAD();
+            case 1:
+                return this.getName();
+            case 2:
+                return this.isActive() ? true : false;
+        }
+
+        return null;
+    }
+
+    @Override
+    public TableEditor getTable(int i) {
+        return null;
+    }
 
     @Override
     public boolean isAccountNonExpired()

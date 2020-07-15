@@ -2,55 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a8b24ef-3582-46cc-974b-94c8a8878230" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UIEditEntities.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UISettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/config/MvcConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/ManagerController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/WebController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/KioskRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/ManagerRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/repository/QueueRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/AuthProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/StartLogic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/kiosk.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/registration.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/user.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/TableEditor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/editorImpl/FieldSelect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/editorImpl/FieldsObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/editorImpl/TypeField.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/queueserver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/queueserver.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Kiosk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Kiosk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/KioskMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/KioskMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Manager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/ManagersStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/ManagersStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Numerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Numerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Queue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Queue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Reason.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Reason.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Status.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Ticket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketSelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketSelling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entities/TicketStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/TicketStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Kiosk.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/KioskMenu.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Manager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/ManagersStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Numerator.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Queue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Reason.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Status.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/Ticket.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketSelling.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entities/TicketStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UIEditEntities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/UI/UIEditEntities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/ManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/WebController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/controller/WebController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Manager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/baikalsr/queueserver/entity/Manager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/kiosk.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/kiosk.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/controller/ManagerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/controller/ManagerController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/controller/WebController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/controller/WebController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entity/Manager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/baikalsr/queueserver/entity/Manager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/settings.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -115,10 +81,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="HTML File" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -243,7 +209,7 @@
       <workItem from="1594039483614" duration="655000" />
       <workItem from="1594101175755" duration="15422000" />
       <workItem from="1594194978356" duration="27990000" />
-      <workItem from="1594367201878" duration="10249000" />
+      <workItem from="1594367201878" duration="21376000" />
     </task>
     <servers />
   </component>

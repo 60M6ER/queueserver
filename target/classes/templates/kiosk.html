@@ -14,18 +14,10 @@
     <form name="userSet" th:action="@{/settings/saveUser}" th:object="${manager}"  method="post">
         <table>
             <tr th:each="field, state : ${fields}">
-                <th:block th:unless="field.get('type') == 3">
-                    <td align="right" th:text="${field.get('name')}"></td>
-                    <td align="left">
-                        <input th:if="${field.get('type') == 0}" type="text" th:value="${manager.getField(state.index)}">
-                        <input th:if="${field.get('type') == 1}" type="checkbox" th:value="${manager.getField(state.index)}">
-                        <th:block th:if="${field.get('type') == 2}" >
-                            <select th:value="${manager.getField(state.index)}">
-                                <option
-                            </select>
-                        </th:block>
-                    </td>
-                </th:block>
+                <td align="right" th:text="${field.get('name')}"></td>
+                <td align="left">
+                    <input th:if="${field.get('type') == 0}" type="text" th:value="${manager.getField(state.index)}">
+                </td>
             </tr>
             <tr>
                 <td align="right"><input type="submit" value="Сохранить"></td>
