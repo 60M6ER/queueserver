@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Numerator {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     private int currentQuantity;
 
@@ -14,11 +14,11 @@ public class Numerator {
     @JoinColumn(name = "queue_id")
     private Queue queue;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

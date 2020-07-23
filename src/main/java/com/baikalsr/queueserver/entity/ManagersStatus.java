@@ -8,7 +8,7 @@ public class ManagersStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     private int casement;
     private Date date;
@@ -17,46 +17,51 @@ public class ManagersStatus {
     @JoinColumn(name = "manager_id")
     private Manager manager;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public ManagersStatus setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public int getCasement() {
         return casement;
     }
 
-    public void setCasement(int casement) {
+    public ManagersStatus setCasement(int casement) {
         this.casement = casement;
+        return this;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public ManagersStatus setDate(Date date) {
         this.date = date;
+        return this;
     }
 
     public Manager getManager() {
         return manager;
     }
 
-    public void setManager(Manager manager) {
+    public ManagersStatus setManager(Manager manager) {
         this.manager = manager;
+        return this;
     }
 
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public ManagersStatus setStatus(Status status) {
         this.status = status;
+        return this;
     }
 }

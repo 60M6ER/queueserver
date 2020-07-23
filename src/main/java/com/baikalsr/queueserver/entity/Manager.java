@@ -4,7 +4,12 @@ import com.baikalsr.queueserver.UI.TableEditor;
 import com.baikalsr.queueserver.UI.UIEditEntities;
 import com.baikalsr.queueserver.UI.editorImpl.FieldsObject;
 import com.baikalsr.queueserver.UI.editorImpl.TypeField;
+import com.baikalsr.queueserver.UI.editorImpl.UserEdit;
+import com.baikalsr.queueserver.repository.ManagerRepo;
+import com.baikalsr.queueserver.repository.QueueRepo;
+import com.sun.istack.Interned;
 import com.sun.istack.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +17,8 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class Manager implements UserDetails, UIEditEntities {
+public class Manager implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,52 +46,21 @@ public class Manager implements UserDetails, UIEditEntities {
     @ManyToMany(mappedBy = "managers", fetch = FetchType.EAGER)
     private List<TicketService> ticketServices;
 
-    @Override
-    public ArrayList<HashMap<String, Object>> getFields() {
-        ArrayList<HashMap<String, Object>> fields = new ArrayList<>();
-
-        HashMap<String, Object> structField = new HashMap<>();
-
-        structField.put("name", "Логин (Active Directory):");
-        structField.put("type", 0);
-        fields.add(structField);
-
-        structField = new HashMap<>();
-        structField.put("name", "Ф. И. О.:");
-        structField.put("type", 0);
-        fields.add(structField);
-
-        structField = new HashMap<>();
-        structField.put("name", "Активный:");
-        structField.put("type", 1);
-        fields.add(structField);
-
-        structField = new HashMap<>();
-        structField.put("name", "Очередь:");
-        structField.put("type", 2);
-        fields.add(structField);
-
-        return fields;
+    public Manager() {
     }
 
-
-    @Override
-    public Object getField(int i) {
-        switch (i){
-            case 0:
-                return this.getLoginAD();
-            case 1:
-                return this.getName();
-            case 2:
-                return this.isActive() ? true : false;
-        }
-
-        return null;
-    }
-
-    @Override
-    public TableEditor getTable(int i) {
-        return null;
+    public Manager(UserEdit userEdit) {
+        this.id = userEdit.getId();
+        this.loginAD = userEdit.getLoginAD();
+        this.name = userEdit.getName();
+        this.active = userEdit.isActive();
+        this.roles = userEdit.getRoles();
+        this.queue = userEdit.getQueue();
+        this.ticketServices = userEdit.getTicketServices();
+        if (!(userEdit.getNewSecurityPass()==null))
+            this.password = userEdit.getNewSecurityPass();
+        else
+            this.password = userEdit.getCurrentPassword();
     }
 
     @Override
@@ -178,6 +153,11 @@ public class Manager implements UserDetails, UIEditEntities {
     @Override
     public String getUsername() {
         return getLoginAD();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     public String getName() {

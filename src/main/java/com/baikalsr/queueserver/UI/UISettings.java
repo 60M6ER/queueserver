@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UISettings {
-    public static HashMap<String, UISettings> settingsMap;
+    public static HashMap<String, Object> poolEditObjects = new HashMap<>();
 
     private String lastURL;
 

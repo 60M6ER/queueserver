@@ -1,5 +1,6 @@
 package com.baikalsr.queueserver.entity;
 
+import com.baikalsr.queueserver.UI.editorImpl.QueueEdit;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ public class Queue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotNull
     private String name;
@@ -31,6 +32,19 @@ public class Queue {
     @OneToOne(mappedBy = "queue")
     private Numerator numerator;
 
+    public Queue() {
+    }
+
+    public Queue(QueueEdit queueEdit) {
+        id = queueEdit.getId();
+        name = queueEdit.getName();
+        quantityTablo = queueEdit.getQuantityTablo();
+        quantityInform = queueEdit.getQuantityInform();
+        timeInform = queueEdit.getTimeInform();
+        kioskMenu = queueEdit.getKioskMenu();
+        managers = queueEdit.getManagers();
+        numerator = queueEdit.getNumerator();
+    }
 
     public List<Manager> getManagers() {
         return managers;
@@ -40,7 +54,7 @@ public class Queue {
         this.managers = managers;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -64,7 +78,7 @@ public class Queue {
         this.kioskMenu = kioskMenu;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -92,6 +106,14 @@ public class Queue {
         return numerator;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((Queue) obj).id;
+    }
+    @Override
+    public String toString() {
+        return name;
+    }
     public void setNumerator(Numerator numerator) {
         this.numerator = numerator;
     }

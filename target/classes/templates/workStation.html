@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>"Электронная очередь Байкал-сервис"</title>
+</head>
+<body>
+<div class="headSite" align="center">
+    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
+    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти"/>
+    </form>
+    <div class="menu">
+        <table >
+            <tr>
+                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
+                    th:if="${menuUI.getByRole(menuUnit)}">
+                    <a th:href="@{__${menuUnit.get('URL')}__}"
+                       th:text="${menuUnit.get('name')}"></a>
+                </td>
+            </tr>
+        </table>
+        <hr width="95%">
+    </div>
+</div>
+
+<div align="center">
+    <form action="#" th:action="@{/WorkSession}" th:object="${workStationUI}" method="post">
+        <input hidden type="text" name="loginAD" th:value="*{loginAD}">
+        <table>
+            <tr>
+                <td>Окно:</td>
+                <th:block th:unless="${workStationUI.isWorking()}">
+                    <td><input type="number" name="casement" th:value="*{casement}"></td>
+                    <td>
+                        <button type="submit" name="startWorkSession" value="1">Начать сессию</button>
+                    </td>
+                </th:block>
+                <th:block th:if="${workStationUI.isWorking()}">
+                    <td><input disabled type="number" name="casement" th:value="*{casement}"></td>
+                    <td>
+                        <button type="submit" name="startWorkSession" value="0">Завершить сессию</button>
+                    </td>
+                </th:block>
+            </tr>
+        </table>
+
+    <h3 th:if="${workStationUI.isTicketServicing()}" th:text="'Вам ' + ${workStationUI.getTypeDistributionToString()} + ' талон: ' + ${workStationUI.getTicket().getName()}"></h3>
+        <button th:if="${workStationUI.isWaiting()}" type="submit" name="serviceClient" value="1">Принять клиента</button>
+        <button th:if="${workStationUI.isServicing()}" type="submit" name="serviceClient" value="0">Завершить обслуживание</button>
+    </form>
+</div>
+
+</body>
+</html>

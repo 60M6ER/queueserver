@@ -8,18 +8,18 @@ import javax.persistence.*;
 public class KioskMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotNull
     private String name;
 
     private String menuJson;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,7 +34,10 @@ public class KioskMenu {
     public String getMenuJson() {
         return menuJson;
     }
-
+    @Override
+    public String toString() {
+        return name;
+    }
     public void setMenuJson(String menuJson) {
         this.menuJson = menuJson;
     }

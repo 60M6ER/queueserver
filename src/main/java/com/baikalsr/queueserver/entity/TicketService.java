@@ -1,5 +1,6 @@
 package com.baikalsr.queueserver.entity;
 
+import com.baikalsr.queueserver.UI.editorImpl.TicketServiceEdit;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 public class TicketService {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotNull
     private String name;
@@ -20,11 +21,22 @@ public class TicketService {
     @JoinColumn(name = "users_id")
     private List<Manager> managers;
 
-    public int getId() {
+
+    public TicketService() {
+    }
+
+    public TicketService(TicketServiceEdit serviceEdit) {
+        id = serviceEdit.getId();
+        name = serviceEdit.getName();
+        priority = serviceEdit.getPriority();
+        managers = serviceEdit.getManagers();
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -48,6 +60,16 @@ public class TicketService {
         return managers;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == String.class)
+            return obj.equals("" + id);
+        return id == ((TicketService) obj).id;
+    }
+    @Override
+    public String toString() {
+        return name;
+    }
     public void setManagers(List<Manager> managers) {
         this.managers = managers;
     }

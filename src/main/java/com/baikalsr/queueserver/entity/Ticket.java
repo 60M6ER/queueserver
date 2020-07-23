@@ -7,10 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotNull
     private String name;
@@ -40,11 +41,11 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketSelling> ticketSellings;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -139,7 +140,10 @@ public class Ticket {
     public List<TicketSelling> getTicketSellings() {
         return ticketSellings;
     }
-
+    @Override
+    public String toString() {
+        return name;
+    }
     public void setTicketSellings(List<TicketSelling> ticketSellings) {
         this.ticketSellings = ticketSellings;
     }

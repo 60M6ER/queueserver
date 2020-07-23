@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'QBS: ' + ${manager.getName()}">Настройки пользователя</title>
+    <title th:text="'QBS: ' + ${entity.getName()}">Настройки пользователя</title>
     <style>
         select {
             width: 300px; /* Ширина списка в пикселах */
@@ -11,13 +11,23 @@
 </head>
 <body>
 <div align="left">
-    <form name="userSet" th:action="@{/settings/saveUser}" th:object="${manager}"  method="post">
+    <form name="userSet" th:action="@{/settings/saveUser}" th:object="${entity}"  method="post">
         <table>
             <tr th:each="field, state : ${fields}">
-                <td align="right" th:text="${field.get('name')}"></td>
-                <td align="left">
-                    <input th:if="${field.get('type') == 0}" type="text" th:value="${manager.getField(state.index)}">
-                </td>
+                <th:block th:unless='${field.get("type") == 3}'>
+                    <td align="right" th:text="${field.get('name')}"></td>
+                    <td align="left">
+                        <input th:if="${field.get('type') == 0}" type="text" th:value="${field.get('value')}">
+                        <input th:if="${field.get('type') == 1}" type="checkbox" th:checked="${field.get('value')}">
+                        <th:block th:if="${field.get('type') == 2}" >
+                            <select th:value="${field.get('value')}" th:utext="${field.get('show')}">
+                                <option th:each="selObj : ${entity.getOptionSelect(state.count)}"
+                                        th:value="${selObj.get('value')}"
+                                        th:utext="${selObj.get('name')}"></option>
+                            </select>
+                        </th:block>
+                    </td>
+                </th:block>
             </tr>
             <tr>
                 <td align="right"><input type="submit" value="Сохранить"></td>

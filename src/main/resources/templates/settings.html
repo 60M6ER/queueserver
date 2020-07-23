@@ -5,19 +5,53 @@
     <title>Настройки электронной очереди</title>
 </head>
 <body>
+<div class="headSite" align="center">
+    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
+    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти"/>
+    </form>
+    <div class="menu">
+        <table >
+            <tr>
+                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
+                    th:if="${menuUI.getByRole(menuUnit)}">
+                    <a th:href="@{__${menuUnit.get('URL')}__}"
+                       th:text="${menuUnit.get('name')}"></a>
+                </td>
+            </tr>
+        </table>
+        <hr width="95%">
+    </div>
+</div>
 <div align="left">
     <a href="/settings?currentSet=Users">Пользователи</a></br>
     <a href="/settings?currentSet=Kiosks">Киоски</a></br>
     <a href="/settings?currentSet=KiosksMenu">Меню киосков</a></br>
-    <a href="/settings?currentSet=Queue">Электронные очереди</a></br>
+    <a href="/settings?currentSet=Queues">Электронные очереди</a></br>
     <a href="/settings?currentSet=TicketService">Услуги</a></br>
 
 </div>
 <div align="center">
     <table th:if="${currentSet=='Users'}" border="1px">
-        <tr><td th:each="manager : ${Users}">
+        <a th:href="@{/settings/user(id=-1)}">Создать нового пользователя</a>
+        <tr th:each="manager : ${Users}"><td>
             <a th:href="@{/settings/user(id=${manager.getId()})}"
                th:text="${manager.getName()}"></a>
+        </td></tr>
+    </table>
+    <table th:if="${currentSet=='Queues'}" border="1px">
+        <a th:href="@{/settings/queue(id=-1)}">Создать новую очередь</a>
+        <tr th:each="queue : ${queues}"><td>
+            <a th:href="@{/settings/queue(id=${queue.getId()})}"
+               th:text="${queue.getName()}"></a>
+        </td></tr>
+    </table>
+    <table th:if="${currentSet=='TicketService'}" border="1px">
+        <a th:href="@{/settings/service(id=-1)}">Создать новую услугу</a>
+        <tr th:each="service : ${services}"><td>
+            <a th:href="@{/settings/service(id=${service.getId()})}"
+               th:text="${service.getName()}"></a>
         </td></tr>
     </table>
 </div>
