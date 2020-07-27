@@ -1,35 +1,43 @@
 package com.baikalsr.queueserver.UI;
 
-import com.baikalsr.queueserver.entity.ManagersStatus;
-import com.baikalsr.queueserver.entity.Status;
 import com.baikalsr.queueserver.entity.Ticket;
 import com.baikalsr.queueserver.entity.TypeDistribution;
 
 public class WorkStationUI {
     private boolean working;
-    private String loginAD;
-    private ManagersStatus status;
     private int casement;
-    private Ticket ticket;
+    private String errorEditSession = "";
     private boolean ticketServicing;
     private TypeDistribution typeDistribution;
+    private boolean waiting;
+    private boolean servicing;
+    private Ticket ticket;
+    private Long ticketID;
+
+
 
     public WorkStationUI() {
     }
 
-    public WorkStationUI(String key) {
-        loginAD = key;
-    }
 
     public TypeDistribution getTypeDistribution() {
         return typeDistribution;
     }
 
     public String getTypeDistributionToString() {
+        if (typeDistribution == null)
+            return "NaN";
+
         if (this.typeDistribution == TypeDistribution.AUTO)
             return "назначен";
         else
             return "перенаправлен";
+    }
+
+    public String ticketToString() {
+        if (ticket == null)
+            return "NaN";
+        return ticket.getName();
     }
 
     public void setTypeDistribution(TypeDistribution typeDistribution) {
@@ -37,16 +45,11 @@ public class WorkStationUI {
     }
 
     public boolean isWaiting() {
-        if (this.status.getStatus() == Status.WAIT_CLIENT)
-            return true;
-        return false;
+        return waiting;
     }
 
     public boolean isServicing() {
-        if (this.status.getStatus() == Status.SERVICING_CLIENT
-        || this.status.getStatus() == Status.SERVICING_REGULAR_CLIENT)
-            return true;
-        return false;
+        return servicing;
     }
 
     public boolean isWorking() {
@@ -55,18 +58,6 @@ public class WorkStationUI {
 
     public void setWorking(boolean working) {
         this.working = working;
-    }
-
-    public String getLoginAD() {
-        return loginAD;
-    }
-
-    public ManagersStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ManagersStatus status) {
-        this.status = status;
     }
 
     public int getCasement() {
@@ -89,11 +80,31 @@ public class WorkStationUI {
         this.ticketServicing = ticketServicing;
     }
 
+    public String getErrorEditSession() {
+        return errorEditSession;
+    }
+
+    public Long getTicketID() {
+        return ticketID;
+    }
+
+    public void setTicketID(Long ticketID) {
+        this.ticketID = ticketID;
+    }
+
+    public void setErrorEditSession(String errorEditSession) {
+        this.errorEditSession = errorEditSession;
+    }
+
     public void setCasement(int casement) {
         this.casement = casement;
     }
 
-    public void setLoginAD(String loginAD) {
-        this.loginAD = loginAD;
+    public void setWaiting(boolean waiting) {
+        this.waiting = waiting;
+    }
+
+    public void setServicing(boolean servicing) {
+        this.servicing = servicing;
     }
 }

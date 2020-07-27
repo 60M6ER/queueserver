@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class StartLogic implements CommandLineRunner {
@@ -23,14 +21,14 @@ public class StartLogic implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private Logger logger = LoggerFactory.getLogger("Starting application");
+    private static final Logger LOGGER = LoggerFactory.getLogger(StartLogic.class);
 
     @Override
     public void run(String... args) throws Exception {
         long countUsers = managerRepo.count();
         if (countUsers == 0){
 
-            logger.warn("Нет пользователей!");
+            LOGGER.warn("Нет созданных пользователей пользователей!");
 
             Manager newAdmin = new Manager();
             newAdmin.setActive(true);
@@ -40,7 +38,7 @@ public class StartLogic implements CommandLineRunner {
             newAdmin.setRoles(Collections.singleton(Role.ADMINISTRATOR));
 
             managerRepo.save(newAdmin);
-            logger.warn("Создан новый администратор");
+            LOGGER.warn("Создан новый пользователь с ролью Администратор");
         }
     }
 }

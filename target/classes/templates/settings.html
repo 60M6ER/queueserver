@@ -54,6 +54,28 @@
                th:text="${service.getName()}"></a>
         </td></tr>
     </table>
+    <table th:if="${currentSet=='Kiosks'}" border="1px">
+        <a th:href="@{/settings/kiosk(id=-1)}">Создать новый киоск</a>
+        <tr th:each="kiosk : ${Kiosks}">
+            <td>
+                <a th:href="@{/settings/kiosk(id=${kiosk.getId()})}"
+                   th:text="${kiosk.getName()}"></a>
+            </td>
+            <td th:text="${kiosk.getIP()}">
+            </td>
+            <td th:text="${kiosk.getComment()}">
+            </td>
+        </tr>
+    </table>
+    <table th:if="${currentSet=='KiosksMenu'}" border="1px">
+        <a th:href="@{/settings/kioskMenu(id=-1)}">Создать новый элемент меню</a>
+        <tr th:each="kioskMenu : ${KioskMenus}">
+            <td>
+                <a th:href="@{/settings/kioskMenu(id=${kioskMenu.getId()})}"
+                   th:text="${kioskMenu.toString()}"></a>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

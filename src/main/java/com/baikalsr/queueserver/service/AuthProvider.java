@@ -1,6 +1,8 @@
 package com.baikalsr.queueserver.service;
 
 import com.baikalsr.queueserver.entity.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +17,8 @@ import java.util.Collection;
 
 @Component
 public class AuthProvider implements AuthenticationProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthProvider.class);
+
     @Autowired
     private UserService userService;
 
@@ -36,7 +40,7 @@ public class AuthProvider implements AuthenticationProvider {
             }
 
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-
+            LOGGER.info("Авторизован пользователь: " + user.getName());
             return new UsernamePasswordAuthenticationToken(user, password, authorities);
         }
         else

@@ -33,6 +33,20 @@ public class StatusManagerIMPL implements StatusManager {
     }
 
     @Override
+    public Boolean managerIsStartSession(Manager manager) {
+        Status status = getStatusManager(manager);
+        if (status != Status.NOT_WORKING_TIME) return true;
+        return false;
+    }
+
+    @Override
+    public int getCasement(Manager manager) {
+        ManagersStatus managersStatus = managersStatusRepo.getLastByManagerId(manager.getId());
+
+        return managersStatus == null ? 0 : managersStatus.getCasement();
+    }
+
+    @Override
     public String statusToString(Status status) {
         if (status == Status.INDIVIDUAL_TIME)
             return "Личное время";

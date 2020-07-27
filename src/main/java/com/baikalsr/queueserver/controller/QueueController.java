@@ -3,22 +3,13 @@ package com.baikalsr.queueserver.controller;
 import com.baikalsr.queueserver.UI.MenuUI;
 import com.baikalsr.queueserver.UI.UISettings;
 import com.baikalsr.queueserver.UI.editorImpl.QueueEdit;
-import com.baikalsr.queueserver.UI.editorImpl.UserEdit;
-import com.baikalsr.queueserver.entity.Manager;
 import com.baikalsr.queueserver.entity.Queue;
-import com.baikalsr.queueserver.entity.Role;
+import com.baikalsr.queueserver.repository.KioskMenuRepo;
 import com.baikalsr.queueserver.repository.KioskRepo;
-import com.baikalsr.queueserver.repository.ManagerRepo;
 import com.baikalsr.queueserver.repository.QueueRepo;
-import com.baikalsr.queueserver.repository.TicketServiceRepo;
 import com.baikalsr.queueserver.service.SecurityService;
 import com.baikalsr.queueserver.service.StatusManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,7 +29,7 @@ public class QueueController {
     private QueueEdit queueEdit;
 
     @Autowired
-    private KioskRepo kioskRepo;
+    private KioskMenuRepo kioskMenuRepo;
 
     //Обеспечание шапки страниц
     @Autowired
@@ -81,7 +72,7 @@ public class QueueController {
 
         UISettings.poolEditObjects.put(newQueueEdit.getUUID(), newQueueEdit);
         model.addAttribute("queue", newQueueEdit);
-        model.addAttribute("kiosks", kioskRepo.findAll());
+        model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
         model.addAttribute("errorPass", "");
 
         return "queue";
@@ -96,7 +87,7 @@ public class QueueController {
         queueEdit.updateQueueEdit(queueEditPool);
 
         model.addAttribute("queue", queueEdit);
-        model.addAttribute("kiosks", kioskRepo.findAll());
+        model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
         model.addAttribute("errorPass", "");
         return "/queue";
     }
@@ -107,7 +98,7 @@ public class QueueController {
         queueEditPool.getManagers().remove(Integer.parseInt(req.getParameter("delManager")));
         queueEdit.updateQueueEdit(queueEditPool);
         model.addAttribute("queue", queueEdit);
-        model.addAttribute("kiosks", kioskRepo.findAll());
+        model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
         model.addAttribute("errorPass", "");
         return "/queue";
     }
@@ -117,7 +108,7 @@ public class QueueController {
         QueueEdit queueEditPool = (QueueEdit) UISettings.poolEditObjects.get(queueEdit.getUUID());
         queueEdit.updateQueueEdit(queueEditPool);
         model.addAttribute("queue", queueEdit);
-        model.addAttribute("kiosks", kioskRepo.findAll());
+        model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
 
         Queue queue = new Queue(queueEdit);
         queueRepo.save(queue);

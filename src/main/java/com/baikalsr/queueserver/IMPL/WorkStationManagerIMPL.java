@@ -6,16 +6,21 @@ import com.baikalsr.queueserver.repository.ManagerRepo;
 import com.baikalsr.queueserver.repository.ManagerTicketRepo;
 import com.baikalsr.queueserver.repository.ManagersStatusRepo;
 import com.baikalsr.queueserver.repository.TicketRepo;
+import com.baikalsr.queueserver.service.StatusManager;
 import com.baikalsr.queueserver.service.WorkStationManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class WorkStationManagerIMPL implements WorkStationManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorkStationManagerIMPL.class);
+
+
     @Autowired
     private ManagerRepo managerRepo;
     @Autowired
@@ -24,137 +29,120 @@ public class WorkStationManagerIMPL implements WorkStationManager {
     private TicketRepo ticketRepo;
     @Autowired
     private ManagerTicketRepo managerTicketRepo;
+    @Autowired
+    private StatusManager statusManager;
 
-    private Map<String, Object> poolWorkStations;
 
     public WorkStationManagerIMPL() {
-        poolWorkStations = new HashMap<>();
     }
 
     @Override
-    public WorkStationUI getWorkStationUI(String key) {
-        if (!poolWorkStations.containsKey(key))
-            poolWorkStations.put(key, createWorkStationUI(key));
-
-        getDistribTalon((WorkStationUI) poolWorkStations.get(key));
-        return (WorkStationUI) poolWorkStations.get(key);
-    }
-
-    @Override
-    public WorkStationUI updateWorkStationUI(WorkStationUI workStationUI) {
-        WorkStationUI workStationUIPool = getWorkStationUI(workStationUI.getLoginAD());
-        //workStationUIPool.setWorking(workStationUI.isWorking());
-        workStationUIPool.setCasement(workStationUI.getCasement());
-        //workStationUIPool.setStatus(workStationUI.getStatus());
-        return workStationUIPool;
-    }
-
-    @Override
-    public void startSession(int casement, String login) {
-        Manager manager = managerRepo.findByLoginAD(login);
+    public void startSession(int casement, Manager manager) {
         ManagersStatus managersStatus = new ManagersStatus();
         managersStatus.setCasement(casement)
                 .setManager(manager)
                 .setDate(new Date())
                 .setStatus(Status.WORKING_TIME);
         managersStatusRepo.save(managersStatus);
+        LOGGER.info("Начата рабочая сессия пользователя: " + manager.getName());
     }
 
     @Override
-    public void endSession(String login) {
-        Manager manager = managerRepo.findByLoginAD(login);
+    public void endSession(Manager manager) {
         ManagersStatus managersStatus = new ManagersStatus();
         managersStatus.setManager(manager)
                 .setDate(new Date())
                 .setStatus(Status.NOT_WORKING_TIME);
         managersStatusRepo.save(managersStatus);
+        LOGGER.info("Завершена рабочая сессия пользователя: " + manager.getName());
     }
 
     @Override
-    public String getTypeDistributionToString() {
-        TypeDistribution typeDistribution
-        public String getTypeDistributionToString() {
-            if (typeDistribution == TypeDistribution.AUTO)
-                return "назначен";
-            else
-                return "перенаправлен";
-        }
-    }
-
-    private WorkStationUI createWorkStationUI(String key) {
-        Manager manager = managerRepo.findByLoginAD(key);
-        ManagersStatus managersStatus = managersStatusRepo.getLastByManagerId(manager.getId());
-        WorkStationUI workStationUI = new WorkStationUI(key);
-
-        if (managersStatus != null) {
-            workStationUI.setStatus(managersStatus);
-            workStationUI.setCasement(managersStatus.getCasement());
-            workStationUI.setWorking(managersStatus.getStatus() == Status.NOT_WORKING_TIME ? false : true);
-        }
-        return workStationUI;
-    }
-
-    @Override
-    public void serviceClient(String login) {
+    public void startServiceClient(Manager manager) {
         Date date = new Date();
-        Manager manager = managerRepo.findByLoginAD(login);
         ManagersStatus managersStatus = new ManagersStatus();
-        WorkStationUI workStationUI = getWorkStationUI(login);
-        managersStatus.setCasement(workStationUI.getCasement())
+
+        managersStatus.setCasement(statusManager.getCasement(manager))
                 .setStatus(Status.SERVICING_CLIENT)
                 .setDate(date)
                 .setManager(manager);
-        workStationUI.setStatus(managersStatus);
 
-        Ticket ticket = workStationUI.getTicket();
+        Ticket ticket = getServicingTicket(manager);
+        if (ticket == null){
+            throw new NullPointerException("Попытка редактировать пустой талон! " + manager.getName());
+        }
         ticket.setDateStartService(date);
         ticket.setStatus(TicketStatus.SERVICING);
 
         ticketRepo.save(ticket);
         managersStatusRepo.save(managersStatus);
+        LOGGER.info("Начато обслуживание клиента с талоном: " + ticket.getName()
+                + " в окне №" + managersStatus.getCasement()
+                + " у менеджера: "+ manager.getName());
     }
 
     @Override
-    public void endServiceClient(String login) {
+    public boolean managerIsStartSession(Manager manager) {
+        return statusManager.managerIsStartSession(manager);
+    }
+
+    @Override
+    public void endServiceClient(Manager manager) {
         Date date = new Date();
-        Manager manager = managerRepo.findByLoginAD(login);
         ManagersStatus managersStatus = new ManagersStatus();
-        WorkStationUI workStationUI = getWorkStationUI(login);
-        managersStatus.setCasement(workStationUI.getCasement())
+
+        managersStatus.setCasement(statusManager.getCasement(manager))
                 .setStatus(Status.WORKING_TIME)
                 .setDate(date)
                 .setManager(manager);
-        workStationUI.setStatus(managersStatus);
-        workStationUI.setTicketServicing(false);
 
-        Ticket ticket = workStationUI.getTicket();
+        Ticket ticket = getServicingTicket(manager);
+        if (ticket == null){
+            throw new NullPointerException("Попытка редактировать пустой талон! " + manager.getName());
+        }
         ticket.setDateEndService(date);
         ticket.setStatus(TicketStatus.ENDED);
 
         ticketRepo.save(ticket);
         managersStatusRepo.save(managersStatus);
+        LOGGER.info("Завершено обслуживание клиента с талоном: " + ticket.getName()
+                + " в окне №" + managersStatus.getCasement()
+                + " у менеджера: "+ manager.getName());
     }
 
-    private void getDistribTalon(WorkStationUI workStationUI) {
-        Manager manager = managerRepo.findByLoginAD(workStationUI.getLoginAD());
-        ManagersStatus managersStatusDB = managersStatusRepo.getLastByManagerId(manager.getId());
-
-        if (managersStatusDB != null) {
-            if (managersStatusDB.getStatus() == Status.WAIT_CLIENT && !workStationUI.isTicketServicing()){
-                workStationUI.setStatus(managersStatusDB);
-                workStationUI.setTicket(ticketRepo.getTicketByManger(manager.getId()));
-                workStationUI.setTicketServicing(true);
-                workStationUI.setTypeDistribution(managerTicketRepo.getLastByTicketId(workStationUI.getTicket().getId()).getTypeDistribution());
-            }
-        }
-
+    @Override
+    public boolean isTicketServicing(Manager manager) {
+        Status status = statusManager.getStatusManager(manager);
+        return status == Status.WAIT_CLIENT
+                || status == Status.SERVICING_CLIENT
+                || status == Status.SERVICING_REGULAR_CLIENT
+                || status == Status.RECEPTION_EXPEDITION;
     }
 
-    public Map<String, Object> getPoolWorkStations() {
-        return poolWorkStations;
+    @Override
+    public boolean isWaiting(Manager manager) {
+        return statusManager.getStatusManager(manager) == Status.WAIT_CLIENT;
     }
 
-    public void setPoolWorkStations(Map<String, Object> poolWorkStations) {
-        this.poolWorkStations = poolWorkStations;
+    @Override
+    public boolean isServicing(Manager manager) {
+        Status status = statusManager.getStatusManager(manager);
+        return status == Status.SERVICING_CLIENT
+                || status == Status.SERVICING_REGULAR_CLIENT
+                || status == Status.RECEPTION_EXPEDITION;
+    }
+
+    @Override
+    public Ticket getServicingTicket(Manager manager) {
+        Ticket ticket = ticketRepo.getServicingTicketByManger(manager.getId());
+
+        return ticket;
+    }
+
+    @Override
+    public TypeDistribution getTypeDistribution(Ticket ticket) {
+        if (ticket != null)
+            return managerTicketRepo.getLastByTicketId(ticket.getId()).getTypeDistribution();
+        return null;
     }
 }

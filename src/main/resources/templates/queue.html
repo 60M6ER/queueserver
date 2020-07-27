@@ -62,9 +62,9 @@
                 <td align="right">Меню киосков:</td>
                 <td align="left">
                     <select name="kioskMenu" th:field="*{kioskMenu}">
-                        <option th:each="kiosk : ${kiosks}"
-                                th:value="${kiosk.getId()}"
-                                th:utext="${kiosk.getName()}"/>
+                        <option th:each="kioskMenu : ${kioskMenus}"
+                                th:value="${kioskMenu.getId()}"
+                                th:utext="${kioskMenu.getName()}"/>
                     </select>
                 </td>
             </tr>

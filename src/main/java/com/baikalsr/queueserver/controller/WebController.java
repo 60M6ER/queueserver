@@ -1,7 +1,6 @@
 package com.baikalsr.queueserver.controller;
 
 import com.baikalsr.queueserver.UI.MenuUI;
-import com.baikalsr.queueserver.UI.editorImpl.QueueEdit;
 import com.baikalsr.queueserver.UI.editorImpl.TicketCreatorUI;
 import com.baikalsr.queueserver.entity.*;
 import com.baikalsr.queueserver.repository.*;
@@ -10,16 +9,11 @@ import com.baikalsr.queueserver.service.SecurityService;
 import com.baikalsr.queueserver.service.StatusManager;
 import com.baikalsr.queueserver.service.TicketDistribution;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class WebController {
@@ -35,7 +29,7 @@ public class WebController {
     @Autowired
     private CreatorTicket creatorTicket;
     @Autowired
-    private TicketRepo ticketRepo;
+    private KioskMenuRepo kioskMenuRepo;
     @Autowired
     private TicketDistribution ticketDistribution;
 
@@ -90,6 +84,11 @@ public class WebController {
             if (currentSet.equals("Kiosks")) {
                 List<Kiosk> kiosks = kioskRepo.findAll();
                 model.addAttribute("Kiosks", kiosks);
+                model.addAttribute("currentSet", currentSet);
+            }
+            if (currentSet.equals("KiosksMenu")) {
+                List<KioskMenu> kioskMenus = kioskMenuRepo.findAll();
+                model.addAttribute("KioskMenus", kioskMenus);
                 model.addAttribute("currentSet", currentSet);
             }
             if (currentSet.equals("Queues")) {

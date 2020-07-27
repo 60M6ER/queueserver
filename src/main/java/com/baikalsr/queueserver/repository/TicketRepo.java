@@ -30,9 +30,10 @@ public interface TicketRepo extends JpaRepository<Ticket, Long> {
             "from ticket t " +
             "where t.id in (select MAX(mt.ticket_id) " +
             "               from manager_ticket mt " +
-            "               where manager_id = 2\n" +
+            "               where manager_id = :managerId\n" +
             "               group by manager_id)\n" +
-            "  and t.status = 1",
+            "  and t.status > 0" +
+            "  and t.status < 4",
     nativeQuery = true)
-    Ticket getTicketByManger(@Param("managerId") Long managerId);
+    Ticket getServicingTicketByManger(@Param("managerId") Long managerId);
 }

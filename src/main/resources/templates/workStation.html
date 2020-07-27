@@ -26,7 +26,7 @@
 
 <div align="center">
     <form action="#" th:action="@{/WorkSession}" th:object="${workStationUI}" method="post">
-        <input hidden type="text" name="loginAD" th:value="*{loginAD}">
+        <input hidden type="text" name="ticketID" th:value="*{ticketID}">
         <table>
             <tr>
                 <td>Окно:</td>
@@ -42,12 +42,20 @@
                         <button type="submit" name="startWorkSession" value="0">Завершить сессию</button>
                     </td>
                 </th:block>
-            </tr>
-        </table>
 
-    <h3 th:if="${workStationUI.isTicketServicing()}" th:text="'Вам ' + ${workStationUI.getTypeDistributionToString()} + ' талон: ' + ${workStationUI.getTicket().getName()}"></h3>
-        <button th:if="${workStationUI.isWaiting()}" type="submit" name="serviceClient" value="1">Принять клиента</button>
-        <button th:if="${workStationUI.isServicing()}" type="submit" name="serviceClient" value="0">Завершить обслуживание</button>
+            </tr>
+            <tr>
+                <td align="center" colspan="3">
+                    <p th:unless="${workStationUI.getErrorEditSession()==''}" th:text="*{errorEditSession}" class="error"></p>
+                </td>
+            </tr>
+
+        </table>
+        <th:block th:if="${workStationUI.isTicketServicing()}">
+            <h3 th:text="'Вам ' + ${workStationUI.getTypeDistributionToString()} + ' талон: ' + ${workStationUI.ticketToString()}"></h3>
+            <button th:if="${workStationUI.isWaiting()}" type="submit" name="serviceClient" value="1">Принять клиента</button>
+            <button th:if="${workStationUI.isServicing()}" type="submit" name="serviceClient" value="0">Завершить обслуживание</button>
+        </th:block>
     </form>
 </div>
 

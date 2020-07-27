@@ -1,5 +1,6 @@
 package com.baikalsr.queueserver.entity;
 
+import com.baikalsr.queueserver.UI.editorImpl.KioskEdit;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -19,6 +20,30 @@ public class Kiosk {
     @JoinColumn(name = "queue_id")
     private Queue queue;
 
+    private String comment;
+
+    private boolean active;
+
+    public Kiosk() {
+    }
+
+    public Kiosk(KioskEdit kioskEdit) {
+        id = kioskEdit.getId();
+        name = kioskEdit.getName();
+        IP = kioskEdit.getIP();
+        queue = kioskEdit.getQueue();
+        comment = kioskEdit.getComment();
+        active = kioskEdit.isActive();
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -37,6 +62,14 @@ public class Kiosk {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Queue getQueue() {

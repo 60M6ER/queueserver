@@ -7,4 +7,6 @@ public interface StatusManager {
     Status getStatusManager(Manager manager);
     Status getStatusManager(String login);
     String statusToString(Status status);
+    Boolean managerIsStartSession(Manager manager);
+    int getCasement(Manager manager);
 }

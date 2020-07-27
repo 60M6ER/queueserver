@@ -2,11 +2,10 @@ package com.baikalsr.queueserver.controller;
 
 import com.baikalsr.queueserver.UI.MenuUI;
 import com.baikalsr.queueserver.UI.WorkStationUI;
-import com.baikalsr.queueserver.UI.editorImpl.TicketServiceEdit;
-import com.baikalsr.queueserver.entity.Status;
+
 import com.baikalsr.queueserver.service.SecurityService;
 import com.baikalsr.queueserver.service.StatusManager;
-import com.baikalsr.queueserver.service.WorkStationManager;
+import com.baikalsr.queueserver.service.WorkStationUIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WorkStationController {
 
     @Autowired
-    private WorkStationManager workStationManager;
+    private WorkStationUIService workStationUIService;
 
     //Обеспечание шапки страниц
     @Autowired
@@ -54,32 +53,40 @@ public class WorkStationController {
 
     @GetMapping("/workStation")
     public String workStation(Model model) {
-        model.addAttribute("workStationUI", workStationManager.getWorkStationUI(securityService.getUsername()));
+        model.addAttribute("workStationUI", workStationUIService.getWorkStationUI());
         return "workStation";
     }
 
     @RequestMapping(value = "/WorkSession", params = {"startWorkSession"}, method = RequestMethod.POST)
     public String startWorkSession(@ModelAttribute("workStationUI") WorkStationUI workStationUI, HttpServletRequest req, Model model) {
-        workStationUI = workStationManager.updateWorkStationUI(workStationUI);
-        workStationUI.setWorking(Integer.parseInt(req.getParameter("startWorkSession")) == 1);
-        if (workStationUI.isWorking()) {
-            workStationManager.startSession(workStationUI.getCasement(), workStationUI.getLoginAD());
+        String error = "";
+        boolean startSession = Integer.parseInt(req.getParameter("startWorkSession")) == 1;
+        if (startSession) {
+            error = workStationUIService.startSession(workStationUI);
         }
         else
-            workStationManager.endSession(workStationUI.getLoginAD());
+            error = workStationUIService.endSession();
+        int casement = workStationUI.getCasement();
+        workStationUI = workStationUIService.getWorkStationUI();
+        if (error != "" && startSession)
+            workStationUI.setCasement(casement);
+        workStationUI.setErrorEditSession(error);
         model.addAttribute("workStationUI", workStationUI);
         return "workStation";
     }
 
     @RequestMapping(value = "/WorkSession", params = {"serviceClient"}, method = RequestMethod.POST)
     public String serviceClient(@ModelAttribute("workStationUI") WorkStationUI workStationUI, HttpServletRequest req, Model model) {
-        workStationUI = workStationManager.updateWorkStationUI(workStationUI);
-        int param = Integer.parseInt(req.getParameter("serviceClient"));
-        if (param == 1) {
-            workStationManager.serviceClient(workStationUI.getLoginAD());
+        String error = "";
+        boolean startServicing = Integer.parseInt(req.getParameter("serviceClient")) == 1;
+        if (startServicing) {
+            error = workStationUIService.startServicing(workStationUI);
         }
         else
-            workStationManager.endServiceClient(workStationUI.getLoginAD());
+            error = workStationUIService.endServicing(workStationUI);
+        workStationUI = workStationUIService.getWorkStationUI();
+        if (error != "") workStationUI.setErrorEditSession(error);
+
         model.addAttribute("workStationUI", workStationUI);
         return "workStation";
     }

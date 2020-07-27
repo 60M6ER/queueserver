@@ -19,26 +19,24 @@ public class SecurityService {
     @Autowired
     private ManagerRepo managerRepo;
 
+
     public boolean testByRolesUser(Collection<Role> rolesFind) {
         boolean isAdministrator = false;
         boolean result = false;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            if (userDetails != null) {
-                Set<Role> roles = (Set<Role>) userDetails.getAuthorities();
-                for (Role role: roles) {
-                    isAdministrator = role == Role.ADMINISTRATOR;
-                    if (isAdministrator) break;
-                    for (Role roleFind : rolesFind) {
-                        result = role == roleFind;
-                        if (result) break;
-                    }
+        UserDetails userDetails = getCurrentUserDetails();
+        if (userDetails != null) {
+            Set<Role> roles = (Set<Role>) userDetails.getAuthorities();
+            for (Role role : roles) {
+                isAdministrator = role == Role.ADMINISTRATOR;
+                if (isAdministrator) break;
+                for (Role roleFind : rolesFind) {
+                    result = role == roleFind;
+                    if (result) break;
                 }
             }
         }
+
         return isAdministrator || result;
     }
 
@@ -54,23 +52,28 @@ public class SecurityService {
         return testByRolesUser(rolesFind);
     }
 
-    public UserDetails getUserDetails() {
+    public UserDetails getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return userDetails;
-
+            return  (UserDetails) authentication.getPrincipal();
         }
         return null;
     }
 
     public String getUsername() {
         String nameUser = "";
-        UserDetails userDetails = getUserDetails();
+        UserDetails userDetails = getCurrentUserDetails();
         if (userDetails != null)
             nameUser = userDetails.getUsername();
 
         return nameUser;
+    }
+
+    public Manager getCurrentManager() {
+        UserDetails userDetails = getCurrentUserDetails();
+        if (userDetails != null)
+            return managerRepo.findByLoginAD(userDetails.getUsername());
+        return null;
     }
 
     public String getNameUser() {

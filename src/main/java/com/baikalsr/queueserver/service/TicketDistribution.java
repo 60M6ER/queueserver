@@ -3,6 +3,8 @@ package com.baikalsr.queueserver.service;
 import com.baikalsr.queueserver.entity.*;
 import com.baikalsr.queueserver.repository.*;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,8 @@ import java.util.*;
 
 @Component
 public class TicketDistribution {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TicketDistribution.class);
+
     @Autowired
     private QueueRepo queueRepo;
     @Autowired
@@ -50,6 +54,15 @@ public class TicketDistribution {
                 managerTicketRepo.save(managerTicket);
                 ticketRepo.save(ticket);
                 managersStatusRepo.save(managersStatus);
+                LOGGER.info("Талон: " + ticket.getName()
+                        + " {"
+                        + "Очередь: " + ticket.getQueue().getName()
+                        + ", Услуга: " + ticket.getService().getName()
+                        + "}"
+                        + " распределен для менеджера: " + manager.getName());
+            }else {
+                LOGGER.debug("Для талона: " + ticket.getName()
+                    + " нет доступного менеджера.");
             }
         }
     }
