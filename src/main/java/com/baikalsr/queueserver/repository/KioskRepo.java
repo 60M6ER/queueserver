@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 @Service
 @Repository
 public interface KioskRepo extends JpaRepository<Kiosk, Long> {
-
+    Kiosk findByIP(String IP);
 }

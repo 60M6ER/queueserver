@@ -2,8 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>"Электронная очередь Байкал-сервис"</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/kioskTerminal.css}"/>
 </head>
 <body>
-Это киоск!
+<div id="logo">
+<img src="/img/logo.png" width="571px" height="89px">
+</div>
+<th:block th:if="${kioskUI.isRegistered()}">
+    <h3>Зарегистрирован</h3>
+</th:block>
+<th:block th:unless="${kioskUI.isRegistered()}">
+    <div id="registerComment" align="center">
+        <form action="#" th:action="@{/setCommentKiosk}" th:object="${kioskUI}" method="post">
+            <h4 class="error">Киоск не зарегистрирован в сервисе!</h4>
+            <input name="comment" type="text" th:value="*{comment}"><br>
+            <button type="submit" name="setComment">Установить комментарий</button>
+        </form>
+    </div>
+</th:block>
 </body>
 </html>

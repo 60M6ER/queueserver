@@ -1,0 +1,22 @@
+#registerComment{
+    margin: auto;
+    width: 300px;
+}
+#logo{
+    margin-top: 197px;
+    margin-left: auto;
+    margin-right: auto;
+    background-image: url("/img/logo.png");
+    background-size: cover;
+    width: 571px;
+    height: 89px;
+}
+
+h4 {
+    color: red;
+}
+
+body {
+    background-image: url("/img/background.png");
+    background-size: cover;
+}

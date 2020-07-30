@@ -1,8 +1,8 @@
 package com.baikalsr.queueserver.service;
 
-import org.springframework.stereotype.Service;
+import com.baikalsr.queueserver.UI.KioskUI;
 
-@Service
-public class KioskService {
-
+public interface KioskService {
+    KioskUI getKioskUI(String key);
+    void setCommentKiosk(String comment, String key);
 }
