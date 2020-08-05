@@ -45,7 +45,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/login**", "/registration", "/kiosk"
-                , "/setCommentKiosk", "/**/*.css", "/**/*.png").permitAll()
+                , "/setCommentKiosk", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.woff2", "/**/*.woff", "/**/*.ttf", "/kioskt/*").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/").failureUrl("/login?error").permitAll()

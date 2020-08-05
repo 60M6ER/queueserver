@@ -26,11 +26,9 @@ public class KioskTerminalController {
 
     @RequestMapping(value = "/setCommentKiosk", method = RequestMethod.POST)
     public String kioskStart(@ModelAttribute("kioskUI") KioskUI kioskUI, HttpServletRequest req, Model model){
-        kioskService.setCommentKiosk(kioskUI.getComment(), req.getRemoteAddr());
-//        kioskUI = kioskService.getKioskUI(req.getRemoteAddr());
-//
-//        model.addAttribute("kioskUI", kioskUI);
-        return "/kiosk";
+        if (!kioskService.kioskRegistered(req.getRemoteAddr()))
+            kioskService.setCommentKiosk(kioskUI.getComment(), req.getRemoteAddr());
+        return "redirect:/kiosk";
     }
 
 }

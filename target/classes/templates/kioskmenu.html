@@ -74,9 +74,23 @@
                 </td>
             </tr>
             <tr>
-                <td align="right">Услуга:</td>
+                <td align="right">Услуга 1:</td>
                 <td align="left">
                     <select name="ticketService" th:field="*{ticketService}">
+                        <option th:value="${null}"
+                                th:utext="${null}"></option>
+                        <option th:each="service : ${kioskMenu.getSelectTicketService()}"
+                                th:value="${service.getId()}"
+                                th:utext="${service.getName()}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Услуга 1:</td>
+                <td align="left">
+                    <select name="ticketService2" th:field="*{ticketService2}">
+                        <option th:value="${null}"
+                                th:utext="${null}"></option>
                         <option th:each="service : ${kioskMenu.getSelectTicketService()}"
                                 th:value="${service.getId()}"
                                 th:utext="${service.getName()}"></option>

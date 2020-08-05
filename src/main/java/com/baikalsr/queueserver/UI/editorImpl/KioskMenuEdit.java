@@ -26,6 +26,7 @@ public class KioskMenuEdit {
     private List<KioskMenu> underKioskMenu;
     private TypeButton typeButton;
     private TicketService ticketService;
+    private TicketService ticketService2;
     private KioskMenu addingKioskMenu;
 
     public ArrayList<TypeButton> getSelectTypeButton() {
@@ -42,7 +43,6 @@ public class KioskMenuEdit {
 
     public ArrayList<TicketService> getSelectTicketService() {
         ArrayList<TicketService> selectTicketServices = new ArrayList<>();
-
         List<TicketService> allTicketServices = ticketServiceRepo.findAll();
 
         for (TicketService ticketService : allTicketServices) {
@@ -91,6 +91,7 @@ public class KioskMenuEdit {
         underKioskMenu = kioskMenu.getUnderKioskMenu();
         typeButton = kioskMenu.getTypeButton();
         ticketService = kioskMenu.getTicketService();
+        ticketService2 = kioskMenu.getTicketService2();
     }
 
     public void rebuildKioskMenuEdit(KioskMenu kioskMenu) {
@@ -102,6 +103,7 @@ public class KioskMenuEdit {
             underKioskMenu = kioskMenu.getUnderKioskMenu();
         typeButton = kioskMenu.getTypeButton();
         ticketService = kioskMenu.getTicketService();
+        ticketService2 = kioskMenu.getTicketService2();
     }
 
     public void updateKioskMenuEdit(KioskMenuEdit kioskMenuEdit) {
@@ -176,6 +178,14 @@ public class KioskMenuEdit {
 
     public TicketService getTicketService() {
         return ticketService;
+    }
+
+    public TicketService getTicketService2() {
+        return ticketService2;
+    }
+
+    public void setTicketService2(TicketService ticketService2) {
+        this.ticketService2 = ticketService2;
     }
 
     public void setAddingKioskMenu(KioskMenu addingKioskMenu) {

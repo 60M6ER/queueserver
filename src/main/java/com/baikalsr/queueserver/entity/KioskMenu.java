@@ -23,8 +23,12 @@ public class KioskMenu {
     private TypeButton typeButton;
 
     @OneToOne
-    @JoinColumn(name = "ticket_service_id")
+    @JoinColumn(name = "ticket_service1_id")
     private TicketService ticketService;
+
+    @OneToOne
+    @JoinColumn(name = "ticket_service2_id")
+    private TicketService ticketService2;
 
     public KioskMenu() {
     }
@@ -34,7 +38,8 @@ public class KioskMenu {
         name = kioskMenuEdit.getName();
         underKioskMenu = kioskMenuEdit.getUnderKioskMenu();
         typeButton = kioskMenuEdit.getTypeButton();
-        ticketService = getTicketService();
+        ticketService = kioskMenuEdit.getTicketService();
+        ticketService2 = kioskMenuEdit.getTicketService2();
     }
 
     public Long getId() {
@@ -75,6 +80,14 @@ public class KioskMenu {
 
     public void setTicketService(TicketService ticketService) {
         this.ticketService = ticketService;
+    }
+
+    public TicketService getTicketService2() {
+        return ticketService2;
+    }
+
+    public void setTicketService2(TicketService ticketService2) {
+        this.ticketService2 = ticketService2;
     }
 
     @Override
