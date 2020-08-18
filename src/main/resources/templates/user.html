@@ -74,9 +74,11 @@
                 <td align="right">Очередь:</td>
                 <td align="left">
                     <select name="queue" th:field="*{queue}">
+                        <option th:utext="null"
+                                th:value="null"></option>
                         <option th:each="cqueue : ${queues}"
                                 th:value="${cqueue.getId()}"
-                                th:utext="${cqueue.getName()}"/>
+                                th:utext="${cqueue.getName()}"></option>
                     </select>
                 </td>
             </tr>

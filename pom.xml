@@ -8,11 +8,11 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.larionov.converter</groupId>
-    <artifactId>converter</artifactId>
+    <groupId>com.baikalsr.queueserver</groupId>
+    <artifactId>queueserver</artifactId>
     <version>0.0.1</version>
-    <name>converter</name>
-    <description>Online converter</description>
+    <name>queueserver</name>
+    <description>Queue server Bikal service TK</description>
 
     <properties>
         <java.version>11</java.version>
