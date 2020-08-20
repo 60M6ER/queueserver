@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>"Электронная очередь Байкал-сервис"</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/kioskTerminal.css}"/>
+    <script src="/js/jquery.min.js"></script>
+</head>
+<body id="body">
+<div id="bodyFull" width = "100%" height="100%">
+    <div id="logo">
+        <img src="/img/logo.png" width="571px" height="89px">
+    </div>
+    <th:block th:unless="${kioskUI.isRegistered()}">
+        <div id="registerComment" align="center">
+            <form action="#" th:action="@{/setCommentKiosk}" th:object="${kioskUI}" method="post">
+                <h4 class="error">Киоск не зарегистрирован в сервисе!</h4>
+                <input name="comment" type="text" th:value="*{comment}"><br>
+                <button type="submit" name="setComment">Установить комментарий</button>
+            </form>
+        </div>
+    </th:block>
+</div>
+
+<th:block th:if="${kioskUI.isRegistered()}">
+    <script type="text/javascript">
+        var PAGE = 'Services';
+        var errorMes = '';
+        var bodyKioskHTML = '<div id="bodyKiosk" width="' +
+            screen.width + 'px" ' +
+            'heigth="' +
+            (screen.height - 60) + 'px" style="position: relative;"></div>';
+        var logoHTML = '<div id="logo" style="margin-left: ' + ((screen.width / 2) - (571 / 2)) + 'px"><img src="/img/logo.png" width="571px" height="89px"></div>';
+
+        var dateTimeHTML = '<div id="datetime" style="position: absolute; height: 60px; width: '+screen.width+'px; left: 0px; right: 0px; bottom: 0px; top: ' + (screen.height - 60) + 'px;"></div>';
+        dateTimeHTML += '<div id="date" style="position: absolute; top: ' + (screen.height - 60 + 13) + 'px; left: 31px;"></div>'
+        dateTimeHTML += '<div id="time" style="position: absolute; top: ' + (screen.height - 60 + 13) + 'px; left: ' + (screen.width - 72 - 29) + 'px;"></div>'
+
+        var servicesBodyHTML = '<div id="services" style="position: absolute; display: table;" ></div>';
+
+        var servicesInnerHTML = '';
+
+        var questionYesNoHTML = '<div id="questionYesNo" style="margin-left: ' +
+            ((screen.width / 2) - (699/2)) +'px;">' +
+            '<p class="questionYesNo">Вы будете сейчас оплачивать услуги?</p>' +
+            '</div>';
+
+        var imgPayHTML = '<div class="imgPay" style="position: absolute; margin-left: ' +
+            ((screen.width / 2) - (502 / 2)) + 'px; margin-top: ' +
+            ((screen.height / 2) - (373 / 2)) + 'px;">' +
+            '<img src="/img/pay.png" class="imgPay" width="502px" height="373px">' +
+            '</div>';
+
+        var formYesNoHTML = '<div id="formYesNo" style="position: absolute; width: 870px; height: 227px;' +
+            'margin-left: ' +
+            ((screen.width / 2) - (870 / 2)) + 'px;' +
+            'margin-top: ' +
+            (screen.height - (97 + 227)) + 'px;">' +
+            '</div>';
+
+        var labelPrintingHTML = '<div id="labelPrinting" style="margin-left: ' +
+            ((screen.width / 2) - (611/2)) +'px;">' +
+            '<p class="labelPrinting">Печать талона электронной очереди</p>' +
+            '</div>';
+
+        var imgPrintingHTML = '<div class="imgPrinting" style="position: absolute; margin-left: ' +
+            ((screen.width / 2) - (502 / 2)) + 'px; margin-top: ' +
+            ((screen.height / 2) - (389 / 2)) + 'px;">' +
+            '<img src="/img/talon.png" class="imgPay" width="502px" height="389px">' +
+            '</div>';
+
+        //Обращение на сервер
+        function ajax_get(url, callback) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    console.log('responseText:' + xmlhttp.responseText);
+                    try {
+                        var data = JSON.parse(xmlhttp.responseText);
+                    } catch(err) {
+                        console.log(err.message + " in " + xmlhttp.responseText);
+                        return;
+                    }
+                    callback(data);
+                }
+            };
+
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+
+        //Функции отрисовки
+        ////////////////////////
+        function updateTime() {
+            ajax_get('/kioskt/get_time', function(data) {
+                document.getElementById("date").innerHTML = data["date"];
+                document.getElementById("time").innerHTML = data["time"];
+            });
+        }
+
+        function drawPage(data) {
+            if (data["type"] == 'List'){
+                var html = logoHTML + servicesBodyHTML;
+                document.getElementById("bodyKiosk").innerHTML = html;
+                document.getElementById("bodyFull").style = 'background-image: url("/img/background.png");' +
+                    '    background-size: cover;';
+                drawServices(data);
+            }else if (data["type"] == 'YESNO') {
+                var html = questionYesNoHTML + imgPayHTML + formYesNoHTML;
+                document.getElementById("bodyKiosk").innerHTML = html;
+                document.getElementById("bodyFull").style = 'background-image: url("/img/background2.png");' +
+                    '    background-size: cover;';
+                drawYesNo(data);
+            }else {
+                document.getElementById("bodyFull").style = 'background-image: url("/img/background2.png");' +
+                    '    background-size: cover;';
+                drawPrinting(data);
+            }
+
+        }
+
+        function drawPrinting(data) {
+
+            var printingHTML = labelPrintingHTML + imgPrintingHTML;
+            document.getElementById("bodyKiosk").innerHTML = printingHTML;
+            setTimeout(updateServices, 10 * 1000);
+        }
+
+        function drawYesNo(data) {
+
+            var buttonsHTML = '<div class="button_YesNo" ' +
+                'style="position: absolute;' +
+                'margin-left: 0px;' +
+                'margin-top: 0px;" ' +
+                ' onclick="clickYesNo('+ ("'id=" + data['idMenu'] + "&yesno=yes'") + ')"><table style="padding: 0px;"><tr><td style="padding: 0px; ' +
+                'width: 412px; height: 106px; vertical-align: middle; text-align: center;">Да' +
+                '</td></tr></table></div></div>' +
+                '<div class="button_YesNo" ' +
+                'style="position: absolute;' +
+                'margin-left: 458px;' +
+                'margin-top: 0px;" ' +
+                ' onclick="clickYesNo('+ ("'id=" + data['idMenu'] + "&yesno=no'") + ')"><table style="padding: 0px;"><tr><td style="padding: 0px; ' +
+                'width: 412px; height: 106px; vertical-align: middle; text-align: center;">Нет' +
+                '</td></tr></table></div></div>' +
+                '<div class="button_Back" ' +
+                'style="position: absolute;' +
+                'margin-left: 229px;' +
+                'margin-top: 147px;" ' +
+                ' onclick="clickBack()"><table style="padding: 0px;"><tr><td style="padding: 0px; ' +
+                'width: 412px; height: 80px; vertical-align: middle; text-align: center;">Назад' +
+                '</td></tr></table></div></div>';
+            document.getElementById("formYesNo").innerHTML = buttonsHTML;
+        }
+
+        function drawServices(data) {
+            var servicesHTML = '';
+            var centerW = screen.width / 2; //Центр экрана по гризонтали
+            var centerH = 197 + 89 + ((screen.height - 197 - 89 - 60) / 2); //Центр экрана по вертикали с учетом логотипа и меню
+            var heightMenu = (data['list'].length * 106) + ((data['list'].length - 1)* 18); //Высота меню с учетом разрывов
+            var position = centerH - (heightMenu / 2); //Начальная позиция отступа сверху элемента меню
+            var step = 106 + 18; //шаг увеличения позиции элемента меню
+
+            data["list"].forEach(function(item, i, arr) {
+                servicesHTML += '<div class="button_service" ' +
+                    'style="position: absolute;' +
+                    'margin-left: ' + (centerW - (680 / 2)) + 'px;' +
+                    'margin-top: ' + position + 'px;" ' +
+                    ' onclick="clickButton(' + item.id + ')"><table style="padding: 0px;"><tr><td style="padding: 0px; ' +
+                    'width: 680px; height: 106px; vertical-align: middle; text-align: center;">' + item.name + '</td></tr></table></div>';
+                position += step;
+            });
+            document.getElementById("services").innerHTML = servicesHTML;
+
+        }
+
+        function updateServices() {
+            ajax_get('/kioskt/get_services', function (data) {
+                drawPage(data);
+            });
+        }
+
+        //Функции обработки событий
+        ////////////////////////
+        function clickButton(id) {
+            if (id != 0) {
+                var url = '/kioskt/clickservice';
+                var body = 'id=' + id;
+                ajax_get(url + '?' + body, function (data) {
+                    drawPage(data);
+                });
+            }
+        }
+
+        function clickBack() {
+            updateServices();
+        }
+
+        function clickYesNo(yesNo) {
+            if (yesNo != '') {
+                var url = '/kioskt/clickservice';
+                var body = yesNo;
+                ajax_get(url + '?' + body, function (data) {
+                    drawPage(data);
+                });
+            }
+        }
+
+        //Печать талона
+        function callPrint(talon) {
+            var WinPrint =
+                window.open('', '', 'left=50,top=50,width=800,height=640,toolbar=0,scrollbars=1,status=0');
+            WinPrint.document.write('<div id="print" class="contentpane">');
+            //WinPrint.document.write(prtCSS);
+            //WinPrint.document.write(prtContent.innerHTML);
+            WinPrint.document.write('<br/><br/><br/>');
+            WinPrint.document.write('<p>Это талон распечатанный из браузера</p>');
+            WinPrint.document.write('<br/><br/><br/>');
+            WinPrint.document.write('</div>');
+            WinPrint.document.close();
+            WinPrint.focus();
+            WinPrint.print();
+            WinPrint.close();
+            //prtContent.innerHTML=strOldOne;
+        }
+
+        var htmlTemplate = bodyKioskHTML + dateTimeHTML;
+        document.getElementById("bodyFull").innerHTML = htmlTemplate;
+
+
+        //alert('Мы в скрипте');
+        updateTime(); //Обновляем время
+        window.onload = function (ev) {
+            updateServices();
+        }
+
+        //регулярные методы
+        setInterval(updateTime, 30 * 1000); //Подключаем обновление времени два раза в минуту
+    </script>
+</th:block>
+</body>
+</html>
