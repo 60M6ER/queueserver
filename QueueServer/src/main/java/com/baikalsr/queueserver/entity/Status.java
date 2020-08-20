@@ -1,0 +1,7 @@
+package com.baikalsr.queueserver.entity;
+
+
+public enum Status {
+    INDIVIDUAL_TIME, NOT_WORKING_TIME, WAIT_CLIENT, SERVICING_CLIENT, SERVICING_REGULAR_CLIENT, RECEPTION_EXPEDITION, WORKING_TIME;
+
+}

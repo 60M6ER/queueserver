@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'QBS: ' + ${kiosk.getName()}">Настройки пользователя</title>
+    <style>
+        select {
+            width: 300px; /* Ширина списка в пикселах */
+        }
+    </style>
+</head>
+<body>
+<div class="headSite" align="center">
+    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
+    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Выйти"/>
+    </form>
+    <div class="menu">
+        <table >
+            <tr>
+                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
+                    th:if="${menuUI.getByRole(menuUnit)}">
+                    <a th:href="@{__${menuUnit.get('URL')}__}"
+                       th:text="${menuUnit.get('name')}"></a>
+                </td>
+            </tr>
+        </table>
+        <hr width="95%">
+    </div>
+</div>
+<div align="left">
+    <form action="#" th:action="@{/saveKiosk}" th:object="${kiosk}"  method="post">
+        <input hidden type="text" name="id" th:value="*{id}">
+        <input hidden type="text" name="UUID" th:value="*{UUID}">
+        <table>
+            <tr>
+                <td align="right">Название:</td>
+                <td align="left">
+                    <input name="name" type="text" th:value="*{name}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Адрес IP:</td>
+                <td align="left">
+                    <input name="IP" type="text" th:value="*{IP}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Очередь:</td>
+                <td align="left">
+                    <select name="queue" th:field="*{queue}">
+                        <option th:each="cqueue : ${kiosk.getSelectQueues()}"
+                                th:value="${cqueue.getId()}"
+                                th:utext="${cqueue.getName()}"/>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Комментарий:</td>
+                <td align="left">
+                    <input name="comment" type="text" th:value="*{comment}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Активный:</td>
+                <td align="left">
+                    <input name="active" type="checkbox" th:checked="*{active}">
+                </td>
+            </tr>
+            <tr th:if="${errorPass!=''}"><td th:text="${errorPass}"></td></tr>
+            <tr>
+                <td align="right"><button type="submit" name="save">Сохранить</button></td>
+                <td align="left">
+                    <a href="/settings?currentSet=Kiosks">Отмена</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>
