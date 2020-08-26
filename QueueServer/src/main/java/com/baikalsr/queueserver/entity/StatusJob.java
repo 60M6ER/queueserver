@@ -1,4 +1,4 @@
-package com.baikalsr.printservice.entity;
+package com.baikalsr.queueserver.entity;
 
 public enum StatusJob {
     WAIT, PRINTING, COMPLETE, ERROR

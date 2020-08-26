@@ -6,7 +6,7 @@ import java.util.List;
 public class ServiceList {
     private String type;
     private Long idMenu;
-    private String errorMes;
+    private String message;
     private List<MenuUnitService> list;
 
 
@@ -15,10 +15,10 @@ public class ServiceList {
         list = new ArrayList<>();
     }
 
-    public ServiceList(String errorMes) {
+    public ServiceList(String message) {
         list = new ArrayList<>();
         type = "Error";
-        this.errorMes = errorMes;
+        this.message = message;
     }
 
     public String getType() {
@@ -45,11 +45,11 @@ public class ServiceList {
         this.idMenu = idMenu;
     }
 
-    public String getErrorMes() {
-        return errorMes;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMes(String errorMes) {
-        this.errorMes = errorMes;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

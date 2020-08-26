@@ -1,9 +1,9 @@
 package com.baikalsr.queueserver.jsonView;
 
-public class IsPrinted {
+public class StatusJobPrinted {
     private String printed;
 
-    public IsPrinted() {
+    public StatusJobPrinted() {
     }
 
     public String isPrinted() {

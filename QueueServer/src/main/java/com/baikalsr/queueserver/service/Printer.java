@@ -1,25 +1,27 @@
-package com.baikalsr.queueserver.entity;
+package com.baikalsr.queueserver.service;
 
+import com.baikalsr.queueserver.entity.PrintJob;
+import com.baikalsr.queueserver.entity.StatusPrinter;
 import com.baikalsr.queueserver.jsonView.StatusesPrinterView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.function.ServerRequest;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public class Printer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Printer.class);
+
+    private final String uriGetStatusJob = "/printer/get_status_job";
+    private final String uriNewJob = "/printer/new_job";
+    private final String uriGetStatuses = "/printer/get_statuses";
 
     private String URL;
     private boolean working;
@@ -38,7 +40,7 @@ public class Printer {
         RestTemplate restTemplate = new RestTemplate();
         String json = "";
         try {
-            json = restTemplate.getForObject(URL + "/printer/get_statuses", String.class);
+            json = restTemplate.getForObject(URL + uriGetStatuses, String.class);
             ObjectMapper objectMapper = new ObjectMapper();
             StatusesPrinterView statusesPrinterView = objectMapper.readValue(json, StatusesPrinterView.class);
             statusPrinter = statusesPrinterView.getStatusPrinter();
@@ -65,8 +67,19 @@ public class Printer {
         headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<PrintJob> requestBody = new HttpEntity<PrintJob>(printJob, headers);
-        ResponseEntity<PrintJob> result = restTemplate.postForEntity(URL + "/printer/new_job", requestBody, PrintJob.class);
-        return result.getBody();
+        ResponseEntity<PrintJob> result = restTemplate.postForEntity(URL + uriNewJob, requestBody, PrintJob.class);
+        if (result.getStatusCode() == HttpStatus.OK)
+            return result.getBody();
+        return null;
+    }
+
+    public PrintJob getStatusJob(UUID id) {
+        RestTemplate restTemplate = new RestTemplate();
+        String parameters = "id=" + id;
+        ResponseEntity<PrintJob> result = restTemplate.getForEntity(URL + uriGetStatusJob + "?" + parameters, PrintJob.class);
+        if (result.getStatusCode() == HttpStatus.OK)
+            return result.getBody();
+        return null;
     }
 
     public String getURL() {
