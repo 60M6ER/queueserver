@@ -68,6 +68,11 @@
             ((screen.height / 2) - (389 / 2)) + 'px;">' +
             '<img src="/img/talon.png" class="imgPay" width="502px" height="389px">' +
             '</div>';
+        var imgErrorHTML = '<div class="imgError" style="position: absolute; margin-left: ' +
+            ((screen.width / 2) - (428 / 2)) + 'px; margin-top: ' +
+            ((screen.height / 2) - (416 / 2)) + 'px;">' +
+            '<img src="/img/ThisIsError.png" class="imgError" width="428px" height="416px">' +
+            '</div>';
 
         //Обращение на сервер
         function ajax_get(url, callback) {
@@ -111,19 +116,44 @@
                 document.getElementById("bodyFull").style = 'background-image: url("/img/background2.png");' +
                     '    background-size: cover;';
                 drawYesNo(data);
-            }else {
+            }else if (data["type"] == 'Print') {
                 document.getElementById("bodyFull").style = 'background-image: url("/img/background2.png");' +
                     '    background-size: cover;';
                 drawPrinting(data);
+            }else {
+                document.getElementById("bodyFull").style = 'background-image: url("/img/background2.png");' +
+                    '    background-size: cover;';
+                drawError(data);
             }
 
         }
 
         function drawPrinting(data) {
-
+            //alert('drawPrinting : ' + data['message']);
             var printingHTML = labelPrintingHTML + imgPrintingHTML;
             document.getElementById("bodyKiosk").innerHTML = printingHTML;
-            setTimeout(updateServices, 10 * 1000);
+            setTimeout(isPrinted, 5 * 1000, data);
+        }
+
+        function isPrinted(data) {
+            var url = '/kioskt/isPrinted';
+            var body = 'id=' + data['message'];
+            ajax_get(url + '?' + body, function (data) {
+                if (data['printed'] == 'ok') {
+                    updateServices();
+                } else if (data['printed'] == 'wait'){
+                    setTimeout(isPrinted, 5 * 1000, UUID);
+                } else {
+                    drawError();
+                }
+            });
+        }
+
+        function drawError(data) {
+            console.log('Error:' + data['message']);
+            var html = logoHTML + imgErrorHTML;
+            document.getElementById("bodyKiosk").innerHTML = html;
+            setTimeout(updateServices, 30 * 1000);
         }
 
         function drawYesNo(data) {
@@ -203,24 +233,6 @@
                     drawPage(data);
                 });
             }
-        }
-
-        //Печать талона
-        function callPrint(talon) {
-            var WinPrint =
-                window.open('', '', 'left=50,top=50,width=800,height=640,toolbar=0,scrollbars=1,status=0');
-            WinPrint.document.write('<div id="print" class="contentpane">');
-            //WinPrint.document.write(prtCSS);
-            //WinPrint.document.write(prtContent.innerHTML);
-            WinPrint.document.write('<br/><br/><br/>');
-            WinPrint.document.write('<p>Это талон распечатанный из браузера</p>');
-            WinPrint.document.write('<br/><br/><br/>');
-            WinPrint.document.write('</div>');
-            WinPrint.document.close();
-            WinPrint.focus();
-            WinPrint.print();
-            WinPrint.close();
-            //prtContent.innerHTML=strOldOne;
         }
 
         var htmlTemplate = bodyKioskHTML + dateTimeHTML;
