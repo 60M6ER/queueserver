@@ -26,13 +26,13 @@ public class CreatorTicket {
         Ticket ticket = new Ticket();
         ticket.setName(service.getName().substring(0,2).toUpperCase() + " " + (indexTicket++));
         ticket.setDateCreate(new Date());
-        ticket.setStatus(TicketStatus.QUEUE);
+        ticket.setStatus(TicketStatus.PRINTING);
         ticket.setQueue(queue);
         ticket.setService(service);
 
 
 
-        //ticketRepo.save(ticket);
+        ticketRepo.save(ticket);
         LOGGER.info("Создан талон: " + ticket.getName()
             + " {Очередь: " + queue.getName()
             + ", Услуга: " + service.getName()

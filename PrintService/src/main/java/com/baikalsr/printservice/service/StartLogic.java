@@ -17,6 +17,6 @@ public class StartLogic implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //servicePrint.getStatuses();
-        LOGGER.info("Прошли статовую обработку");
+        //LOGGER.info("Прошли статовую обработку");
     }
 }

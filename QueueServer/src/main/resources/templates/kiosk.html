@@ -139,12 +139,13 @@
             var url = '/kioskt/isPrinted';
             var body = 'id=' + data['message'];
             ajax_get(url + '?' + body, function (data) {
+
                 if (data['printed'] == 'ok') {
                     updateServices();
                 } else if (data['printed'] == 'wait'){
                     setTimeout(isPrinted, 5 * 1000, UUID);
                 } else {
-                    drawError();
+                    drawError(data);
                 }
             });
         }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -51,7 +52,11 @@ public class KioskRestController {
 
     @RequestMapping(value = "/isPrinted", params = {"id"}, method = RequestMethod.GET)
     private @ResponseBody String isPrinted(HttpServletRequest req) {
-        StatusJobPrinted statusJobPrinted = kioskService.isPrinted(req.getRemoteAddr(), UUID.fromString(req.getParameter("id")));
-        return "{\"printed\":\"" + statusJobPrinted.isPrinted() + "\"}";
+        try {
+            StatusJobPrinted statusJobPrinted = kioskService.isPrinted(req.getRemoteAddr(), UUID.fromString(req.getParameter("id")));
+            return "{\"printed\":\"" + statusJobPrinted.isPrinted() + "\", \"message\":\"" + statusJobPrinted.isPrinted() + "\"}";
+        } catch (IllegalArgumentException e) {
+            return "error UUID";
+        }
     }
 }

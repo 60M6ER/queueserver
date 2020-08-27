@@ -134,22 +134,26 @@ public class KioskServiceIMPL implements KioskService {
             if (yesNo.equals("no")) ticketService = kioskMenu.getTicketService2();
         }
 
-        Ticket ticket = creatorTicket.createTicket(ticketService, queue);
         Printer printer = printService.getPrinter(kiosk);
 
         ServiceList serviceList = new ServiceList();
         if (printer.isWorking()) {
+            Ticket ticket = creatorTicket.createTicket(ticketService, queue);
             PrintJob printJob = printService.createPrintJob(ticket.getName());
             printTemplate(printJob, ticket);
             printJob = printer.newJob(printJob);
-            if (printJob.getStatusJob() == StatusJob.WAIT) {
+            ticket.setPrintJobID(printJob.getNumber());
+            if (printJob.getStatusJob() == StatusJob.WAIT || printJob.getStatusJob() == StatusJob.PRINTING) {
                 serviceList.setType("Print");
                 serviceList.setMessage(printJob.getNumber().toString());
-
-            }else
+                ticket.setStatus(TicketStatus.PRINTING);
+            }else {
                 serviceList.setType("Error");
+                ticket.setStatus(TicketStatus.ERROR_PRINT);
+            }
+            ticketRepo.save(ticket);
         } else {
-            LOGGER.warn("Принтер недоступен. (" + printer.getURL() + ")");
+            LOGGER.warn("Принтер неработает. (" + printer.getURL() + ")");
             serviceList.setType("Error");
         }
 
@@ -159,15 +163,23 @@ public class KioskServiceIMPL implements KioskService {
     @Override
     public StatusJobPrinted isPrinted(String key, UUID id) {
         Kiosk kiosk = kioskRepo.findByIP(key);
+        Ticket ticket = ticketRepo.getTicketByPrintJobID(id);
         StatusJobPrinted statusJobPrinted = new StatusJobPrinted();
         StatusJob statusJob = printService.getStatusJob(kiosk, id);
         String result = "";
-        if (statusJob == StatusJob.WAIT || statusJob == StatusJob.PRINTING)
+        if (statusJob == StatusJob.WAIT || statusJob == StatusJob.PRINTING){
             result = "wait";
-        if (statusJob == StatusJob.COMPLETE)
+            ticket.setStatus(TicketStatus.PRINTING);
+        }
+        if (statusJob == StatusJob.COMPLETE){
             result = "ok";
-        else
+            ticket.setStatus(TicketStatus.QUEUE);
+        }
+        else{
             result = "error";
+            ticket.setStatus(TicketStatus.ERROR_PRINT);
+        }
+        ticketRepo.save(ticket);
         statusJobPrinted.setPrinted(result);
         return statusJobPrinted;
     }

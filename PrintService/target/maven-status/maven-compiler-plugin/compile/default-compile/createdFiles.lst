@@ -1,0 +1,13 @@
+com\baikalsr\printservice\Application.class
+com\baikalsr\printservice\entity\StatusesPrinter.class
+com\baikalsr\printservice\service\QueuePrint.class
+com\baikalsr\printservice\entity\ListJobs.class
+com\baikalsr\printservice\entity\StatusPrinter.class
+com\baikalsr\printservice\service\ServicePrint.class
+com\baikalsr\printservice\config\MvcConfig.class
+com\baikalsr\printservice\entity\PrintJob.class
+com\baikalsr\printservice\controller\WebController.class
+com\baikalsr\printservice\controller\PrinterRestController.class
+com\baikalsr\printservice\service\StartLogic.class
+com\baikalsr\printservice\entity\StatusJob.class
+com\baikalsr\printservice\service\PrintService.class

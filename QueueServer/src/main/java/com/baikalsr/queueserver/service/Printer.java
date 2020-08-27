@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -49,7 +51,7 @@ public class Printer {
             statusHead = statusesPrinterView.getStatusHead();
             working = statusPrinter == StatusPrinter.ONLINE && statusPaper != StatusPrinter.NO_PAPER &&
                     statusHead == StatusPrinter.PRINT_HEAD_NORMAL && statusCuter == StatusPrinter.CUTTER_NORMAL;
-        } catch (HttpServerErrorException e) {
+        } catch (HttpServerErrorException | ResourceAccessException e ) {
             LOGGER.error("Не удалось связаться с сервисом печати киоска: " + URL);
             e.printStackTrace();
         } catch (JsonMappingException e) {

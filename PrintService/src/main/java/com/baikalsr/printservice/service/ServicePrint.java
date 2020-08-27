@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.util.BitSet;
 import java.util.Properties;
@@ -40,7 +39,7 @@ public class ServicePrint {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicePrint.class);
 
     public ServicePrint() {
-        String PATH_TO_PROPERTIES = Paths.get("").toAbsolutePath().toString() + "\\application.properties";
+        String PATH_TO_PROPERTIES = Paths.get("").toAbsolutePath().toString() + "/application.properties";
         parametersCOM = new int[4];
         try {
             FileInputStream fis = new FileInputStream(PATH_TO_PROPERTIES);
@@ -70,17 +69,18 @@ public class ServicePrint {
     }
 
     private synchronized boolean openPort() {
-        boolean result = false;
         try {
-            if (!serialPort.isOpened()) {
-                result = serialPort.openPort();
-                if (result)
-                    result = serialPort.setParams(parametersCOM[0], parametersCOM[1], parametersCOM[2], parametersCOM[3]);
-            }
+            if (!serialPort.isOpened())
+                if (serialPort.openPort())
+                    if (serialPort.setParams(parametersCOM[0], parametersCOM[1], parametersCOM[2], parametersCOM[3]))
+                        return true;
+                    else
+                        throw new Exception("Не правильные параметры COM порта");
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
-        return result;
+        return false;
     }
 
     private synchronized boolean closePort() {
@@ -125,10 +125,10 @@ public class ServicePrint {
 
                 if (bitsPaper.get(6)) statusPaper = StatusPrinter.NO_PAPER;
                 else statusPaper = statusPaper == StatusPrinter.WILL_NO_PAPER ? StatusPrinter.WILL_NO_PAPER : StatusPrinter.NORMAL_PAPER;
-                LOGGER.info("Статус принтера: " + statusPrinter.name() +
-                        "\nСтатус бумаги: " + statusPaper.name() +
-                        "\nСтатус головы: " + statusHead.name() +
-                        "\nСтатус ножа: " + statusCuter.name());
+//                LOGGER.info("Статус принтера: " + statusPrinter.name() +
+//                        "\nСтатус бумаги: " + statusPaper.name() +
+//                        "\nСтатус головы: " + statusHead.name() +
+//                        "\nСтатус ножа: " + statusCuter.name());
             } else {
                 statusPrinter = StatusPrinter.OFFLINE;
             }
@@ -154,6 +154,7 @@ public class ServicePrint {
                     try {
                         boolean writeBytes = false;
                         writeBytes = serialPort.writeBytes(printJob.getContent());
+                        LOGGER.info("Отправлен контент: " + writeBytes);
                         printJob.setStatusJob(writeBytes ? StatusJob.COMPLETE : StatusJob.ERROR);
                     } catch (SerialPortException e) {
                         LOGGER.error("При выводе задания печати не удалось записать данные в COM порт.");
@@ -161,6 +162,7 @@ public class ServicePrint {
                         printJob.setStatusJob(StatusJob.ERROR);
                     }
                 }else {
+                    LOGGER.error("Порт не открылся при печати талона.");
                     printJob.setStatusJob(StatusJob.ERROR);
                 }
                 closePort();
