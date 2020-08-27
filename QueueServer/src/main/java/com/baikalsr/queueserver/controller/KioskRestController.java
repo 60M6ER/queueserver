@@ -1,19 +1,18 @@
 package com.baikalsr.queueserver.controller;
 
 import com.baikalsr.queueserver.IMPL.KioskServiceIMPL;
-import com.baikalsr.queueserver.UI.KioskUI;
-import com.baikalsr.queueserver.jsonVeiw.DateTime;
-import com.baikalsr.queueserver.jsonVeiw.ServiceList;
-import net.bytebuddy.asm.Advice;
+import com.baikalsr.queueserver.jsonView.DateTime;
+import com.baikalsr.queueserver.jsonView.StatusJobPrinted;
+import com.baikalsr.queueserver.jsonView.ServiceList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/kioskt")
@@ -49,5 +48,15 @@ public class KioskRestController {
     @GetMapping(value = "/clickservice", params = {"id", "yesno"})
     private ServiceList clickYesNoSubmit(HttpServletRequest req) {
         return kioskService.getServices(req.getRemoteAddr(), Long.parseLong(req.getParameter("id")), req.getParameter("yesno"));
+    }
+
+    @RequestMapping(value = "/isPrinted", params = {"id"}, method = RequestMethod.GET)
+    private @ResponseBody String isPrinted(HttpServletRequest req) {
+        try {
+            StatusJobPrinted statusJobPrinted = kioskService.isPrinted(req.getRemoteAddr(), UUID.fromString(req.getParameter("id")));
+            return "{\"printed\":\"" + statusJobPrinted.isPrinted() + "\", \"message\":\"" + statusJobPrinted.isPrinted() + "\"}";
+        } catch (IllegalArgumentException e) {
+            return "error UUID";
+        }
     }
 }

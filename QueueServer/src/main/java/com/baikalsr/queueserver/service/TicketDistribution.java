@@ -30,7 +30,7 @@ public class TicketDistribution {
     private ManagersStatusRepo managersStatusRepo;
 
     @Scheduled(fixedDelay = 5 * 1000)
-    public void distributeTickets() {
+    public synchronized void distributeTickets() {
         List<Ticket> tickets = ticketRepo.findAllToDistrib();
         for (Ticket ticket : tickets) {
             Manager manager = managerRepo.getManagerByTicketServiceToDistrib(ticket.getService().getId(),

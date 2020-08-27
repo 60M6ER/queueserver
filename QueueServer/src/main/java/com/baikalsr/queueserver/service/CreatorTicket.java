@@ -24,11 +24,13 @@ public class CreatorTicket {
 
     public Ticket createTicket(TicketService service, Queue queue) {
         Ticket ticket = new Ticket();
-        ticket.setName(service.getName().substring(0,1) + "-" + (indexTicket++));
+        ticket.setName(service.getName().substring(0,2).toUpperCase() + " " + (indexTicket++));
         ticket.setDateCreate(new Date());
-        ticket.setStatus(TicketStatus.QUEUE);
+        ticket.setStatus(TicketStatus.PRINTING);
         ticket.setQueue(queue);
         ticket.setService(service);
+
+
 
         ticketRepo.save(ticket);
         LOGGER.info("Создан талон: " + ticket.getName()

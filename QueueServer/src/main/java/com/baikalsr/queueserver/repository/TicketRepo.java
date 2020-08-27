@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Repository
@@ -36,4 +37,6 @@ public interface TicketRepo extends JpaRepository<Ticket, Long> {
             "  and t.status < 4",
     nativeQuery = true)
     Ticket getServicingTicketByManger(@Param("managerId") Long managerId);
+
+    Ticket getTicketByPrintJobID(UUID uuid);
 }

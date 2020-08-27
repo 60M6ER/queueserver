@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ticket")
@@ -17,7 +18,9 @@ public class Ticket {
     private String name;
 
     private String nameClient;
+    private UUID printJobID;
     private Date dateCreate;
+    private Date datePrinted;
     private Date dateDistrib;
     private Date dateStartService;
     private Date dateEndService;
@@ -135,6 +138,22 @@ public class Ticket {
 
     public void setReason(Reason reason) {
         this.reason = reason;
+    }
+
+    public UUID getPrintJobID() {
+        return printJobID;
+    }
+
+    public void setPrintJobID(UUID printJobID) {
+        this.printJobID = printJobID;
+    }
+
+    public Date getDatePrinted() {
+        return datePrinted;
+    }
+
+    public void setDatePrinted(Date datePrinted) {
+        this.datePrinted = datePrinted;
     }
 
     public List<TicketSelling> getTicketSellings() {

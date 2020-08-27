@@ -10,13 +10,13 @@
     </parent>
     <groupId>com.baikalsr.queueserver</groupId>
     <artifactId>queueserver</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <name>queueserver</name>
     <description>Queue server Bikal service TK</description>
 
     <properties>
         <java.version>11</java.version>
-        <spring.version>3.1.4.RELEASE</spring.version>
+        <spring.version>3.2.4.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -76,6 +76,11 @@
             <groupId>org.apache.directory.server</groupId>
             <artifactId>apacheds-server-jndi</artifactId>
             <version>1.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.12</version>
         </dependency>
 
 
