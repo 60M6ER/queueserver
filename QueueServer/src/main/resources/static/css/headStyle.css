@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'SF Pro Display';
+    src: url('/fonts/SFProDisplay-Bold.woff2') format('woff2'),
+    url('/fonts/SFProDisplay-Bold.woff') format('woff'),
+    url('/fonts/SFProDisplay-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;;
+}
+
+@font-face {
+    font-family: 'SFProDisplay-Regular';
+    src: url('/fonts/SFProDisplay-Regular.woff2') format('woff2'),
+    url('/fonts/SFProDisplay-Regular.woff') format('woff'),
+    url('/fonts/SFProDisplay-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+button {
+    background-color: #136fba;
+    color: white;
+    font: 15px SFProDisplay-Regular;
+    border-radius: 5px;
+}
+
+.button_menu{
+    background-color: #136fba;
+    color: white;
+    font: 15px SFProDisplay-Regular;
+    border-radius: 5px;
+    width: 160px;
+    height: 46px;
+    text-align: center;
+}
+.a_button_menu{
+    font: 15px SFProDisplay-Regular;
+    text-decoration: none;
+}
+
+.error_message{
+    font: 10px Arial;
+    color: red;
+}
+.error_ajax{
+    color: darkred;
+    margin-left: 50px;
+}

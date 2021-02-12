@@ -9,4 +9,5 @@ public interface StatusManager {
     String statusToString(Status status);
     Boolean managerIsStartSession(Manager manager);
     int getCasement(Manager manager);
+    boolean isAvailableCasement(int casement, Manager manager);
 }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="queue DB" uuid="c61df11e-02d7-41d7-89e3-aa7c6181a4ee">
+    <data-source source="LOCAL" name="workST" uuid="bca4b1d3-bf15-4ab0-9eb4-6ec6c745cdbb">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://10.1.85.34:5432/Queue</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="ProdTestDB" uuid="4a38d753-5480-4d22-85db-5933a62d955b">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://10.1.60.156:5432/test_queue_db</jdbc-url>
     </data-source>
   </component>
 </project>

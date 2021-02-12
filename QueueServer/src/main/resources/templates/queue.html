@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <script src="/js/headSite.js"></script>
     <title th:text="'QBS: ' + ${queue.getName()}">Настройки очереди</title>
     <style>
         select {
@@ -11,24 +13,15 @@
 </head>
 <body>
 <div class="headSite" align="center">
-    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
-    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Выйти"/>
-    </form>
-    <div class="menu">
-        <table >
-            <tr>
-                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
-                    th:if="${menuUI.getByRole(menuUnit)}">
-                    <a th:href="@{__${menuUnit.get('URL')}__}"
-                       th:text="${menuUnit.get('name')}"></a>
-                </td>
-            </tr>
-        </table>
-        <hr width="95%">
-    </div>
+
 </div>
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
 <div align="left">
     <form action="#" th:action="@{/saveQueue}" th:object="${queue}"  method="post">
         <input hidden type="text" name="id" th:value="*{id}">

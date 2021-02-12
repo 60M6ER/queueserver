@@ -20,36 +20,52 @@ public class SecurityService {
     private ManagerRepo managerRepo;
 
 
-    public boolean testByRolesUser(Collection<Role> rolesFind) {
+    public boolean testByRolesUser(Collection<Role> rolesFind, Manager manager, boolean trueAdmin) {
         boolean isAdministrator = false;
         boolean result = false;
 
-        UserDetails userDetails = getCurrentUserDetails();
-        if (userDetails != null) {
-            Set<Role> roles = (Set<Role>) userDetails.getAuthorities();
-            for (Role role : roles) {
-                isAdministrator = role == Role.ADMINISTRATOR;
-                if (isAdministrator) break;
-                for (Role roleFind : rolesFind) {
-                    result = role == roleFind;
-                    if (result) break;
-                }
-            }
+        Set<Role> roles = null;
+
+        if (manager == null) {
+            UserDetails userDetails = getCurrentUserDetails();
+            if (userDetails != null)
+                roles = (Set<Role>) userDetails.getAuthorities();
+        } else {
+            roles = manager.getRoles();
         }
 
-        return isAdministrator || result;
+        if (roles == null)
+            return false;
+
+        for (Role role : roles) {
+            isAdministrator = role == Role.ADMINISTRATOR;
+            if (isAdministrator) break;
+            for (Role roleFind : rolesFind) {
+                result = role == roleFind;
+                if (result) break;
+            }
+            if (result) break;
+        }
+
+        return (trueAdmin && (isAdministrator || result))
+                || result;
     }
 
-    public boolean testByRoleUser(Role role) {
+    public boolean testByRoleUser(Role role, Manager manager, boolean trueAdmin) {
         HashSet<Role> rolesFind = new HashSet<>();
         rolesFind.add(role);
-        return testByRolesUser(rolesFind);
+        return testByRolesUser(rolesFind, manager, trueAdmin);
     }
 
-    public boolean isAdministrator() {
+    public boolean isAdministrator(Manager manager) {
         HashSet<Role> rolesFind = new HashSet<>();
         rolesFind.add(Role.ADMINISTRATOR);
-        return testByRolesUser(rolesFind);
+        return testByRolesUser(rolesFind, manager, true);
+    }
+
+    public boolean isServiceUser(Manager manager) {
+        Set<Role> roles = manager.getRoles();
+        return roles.contains(Role.SERVICE);
     }
 
     public UserDetails getCurrentUserDetails() {
@@ -72,7 +88,7 @@ public class SecurityService {
     public Manager getCurrentManager() {
         UserDetails userDetails = getCurrentUserDetails();
         if (userDetails != null)
-            return managerRepo.findByLoginAD(userDetails.getUsername());
+            return managerRepo.findFirstByLoginAD(userDetails.getUsername());
         return null;
     }
 
@@ -81,7 +97,7 @@ public class SecurityService {
         String login = getUsername();
 
         if (login != "") {
-            return managerRepo.findByLoginAD(login).getName();
+            return managerRepo.findFirstByLoginAD(login).getName();
         }
 
         return "";

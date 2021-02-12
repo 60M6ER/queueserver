@@ -26,7 +26,7 @@ public class StatusManagerIMPL implements StatusManager {
     @Override
     public Status getStatusManager(String login) {
 
-        Manager manager = managerRepo.findByLoginAD(login);
+        Manager manager = managerRepo.findFirstByLoginAD(login.toLowerCase());
         ManagersStatus managersStatus = managersStatusRepo.getLastByManagerId(manager.getId());
 
         return managersStatus == null ? Status.NOT_WORKING_TIME : managersStatus.getStatus();
@@ -44,6 +44,24 @@ public class StatusManagerIMPL implements StatusManager {
         ManagersStatus managersStatus = managersStatusRepo.getLastByManagerId(manager.getId());
 
         return managersStatus == null ? 0 : managersStatus.getCasement();
+    }
+
+    @Override
+    public boolean isAvailableCasement(int casement, Manager manager) {
+        ManagersStatus status = managersStatusRepo.getLastByCasementAndQueue(casement, manager.getQueue().getId());
+
+        if(status != null && !status.getManager().equals(manager)){
+            ManagersStatus statusOldManager = managersStatusRepo.getLastByManagerId(status.getManager().getId());
+            if(!(statusOldManager.getStatus() == Status.NOT_WORKING_TIME || statusOldManager.getCasement() != casement))
+                return false;
+        }
+
+        /*for (int i = 0; i < statuses.size(); i++) {
+            if (!statuses.get(i).getManager().equals(manager) && !(statuses.get(i).getStatus() == Status.NOT_WORKING_TIME))
+                return false;
+        }*/
+
+        return true;
     }
 
     @Override

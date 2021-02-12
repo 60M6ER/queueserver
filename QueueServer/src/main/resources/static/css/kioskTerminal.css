@@ -16,12 +16,17 @@
     font-style: normal;
 }
 
+#bodyFull{
+    cursor: inherit;
+}
+
 #registerComment{
     margin: auto;
     width: 300px;
 }
 
 #bodyKiosk{
+    cursor: inherit;
     position: absolute;
     margin-right: 0px;
     margin-top: 0px;
@@ -29,6 +34,7 @@
 }
 
 #logo{
+    cursor: inherit;
     position: absolute;
     margin-top: 197px;
     margin-left: auto;
@@ -40,6 +46,7 @@
 }
 
 #questionYesNo{
+    cursor: inherit;
     width: 699px;
     height: 120px;
     position: absolute;
@@ -48,11 +55,13 @@
 }
 
 p.questionYesNo{
+    cursor: inherit;
     color: #0291d3;
     font: 50px SFProDisplay-Regular;
 }
 
 #labelPrinting{
+    cursor: inherit;
     width: 611px;
     height: 120px;
     position: absolute;
@@ -61,33 +70,39 @@ p.questionYesNo{
 }
 
 p.labelPrinting{
+    cursor: inherit;
     color: #0291d3;
     font: 50px SFProDisplay-Regular;
 }
 
 #datetime{
+    cursor: inherit;
     background-color: #0291d3;
 }
 
 #date{
+    cursor: inherit;
     color: #ffffff;
     text-align: left;
     font: 26px SF Pro Display;
 }
 
 #time{
+    cursor: inherit;
     color: #ffffff;
     text-align: left;
     font: 26px SF Pro Display;
 }
 
 #error_tile{
+    cursor: inherit;
     width: 300px;
     height: 100px;
     background-color: #bf939c;
 }
 
 div.button_YesNo{
+    cursor: inherit;
     width: 412px;
     height: 106px;
     background-color: #0291d3;
@@ -98,6 +113,7 @@ div.button_YesNo{
     box-shadow: 5px 5px 10px #aaaaaa;
 }
 div.button_Back{
+    cursor: inherit;
     width: 412px;
     height: 80px;
     background-color: #136fba;
@@ -109,6 +125,7 @@ div.button_Back{
 }
 
 div.button_service{
+    cursor: inherit;
     width: 680px;
     height: 106px;
     background-color: #0291d3;
@@ -120,10 +137,13 @@ div.button_service{
 }
 
 h4 {
+    cursor: inherit;
     color: red;
 }
 
 body {
+    cursor: url('/img/cursor_tr.png'), auto;
     background-image: url("/img/background.png");
     background-size: cover;
+    margin: 0px;
 }

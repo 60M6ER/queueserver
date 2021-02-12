@@ -2,37 +2,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
     <title>Настройки электронной очереди</title>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/headSite.js"></script>
+    <script src="/js/settingProgram.js"></script>
 </head>
 <body>
-<div class="headSite" align="center">
-    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
-    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Выйти"/>
-    </form>
-    <div class="menu">
-        <table >
-            <tr>
-                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
-                    th:if="${menuUI.getByRole(menuUnit)}">
-                    <a th:href="@{__${menuUnit.get('URL')}__}"
-                       th:text="${menuUnit.get('name')}"></a>
-                </td>
-            </tr>
-        </table>
-        <hr width="95%">
-    </div>
+<div class="headSite" id="headSite" align="center">
+
 </div>
+
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
 <div align="left">
+    <a href="/settings?currentSet=SettingProgram">Настройки программы</a></br>
     <a href="/settings?currentSet=Users">Пользователи</a></br>
     <a href="/settings?currentSet=Kiosks">Киоски</a></br>
+    <a href="/settings?currentSet=Tablos">Табло</a></br>
     <a href="/settings?currentSet=KiosksMenu">Меню киосков</a></br>
     <a href="/settings?currentSet=Queues">Электронные очереди</a></br>
     <a href="/settings?currentSet=TicketService">Услуги</a></br>
+    <a href="/settings?currentSet=RunLine">Бегущие строки</a></br>
 
 </div>
 <div align="center">
+    <table th:if="${currentSet=='SettingProgram'}" border="1px">
+        <tr>
+            <td>Количество часов для сброса в нерабочее время:
+            </td>
+            <td><input type="number" name="hours" id="hours" th:value="${hours}"></td>
+            <td><input type="button" name="save_hours" value="Сохранить" onclick="saveHoursWorkingTime()"></td>
+        </tr>
+        <tr>
+            <td id="error_setting" colspan="3"></td>
+        </tr>
+    </table>
     <table th:if="${currentSet=='Users'}" border="1px">
         <a th:href="@{/settings/user(id=-1)}">Создать нового пользователя</a>
         <tr th:each="manager : ${Users}"><td>
@@ -54,6 +64,20 @@
                th:text="${service.getName()}"></a>
         </td></tr>
     </table>
+    <table th:if="${currentSet=='Tablos'}" border="1px">
+        <a th:href="@{/settings/tablo(id=-1)}">Создать новое табло</a>
+        <a th:href="@{/settings/tabloUpdateAll}">Обновить все</a>
+        <tr th:each="tablo : ${tablos}">
+            <td>
+                <a th:href="@{/settings/tablo(id=${tablo.getId()})}"
+                   th:text="${tablo.getName()}"></a>
+            </td>
+            <td th:text="${tablo.getIP()}">
+            </td>
+            <td th:text="${tablo.getComment()}">
+            </td>
+        </tr>
+    </table>
     <table th:if="${currentSet=='Kiosks'}" border="1px">
         <a th:href="@{/settings/kiosk(id=-1)}">Создать новый киоск</a>
         <tr th:each="kiosk : ${Kiosks}">
@@ -73,6 +97,15 @@
             <td>
                 <a th:href="@{/settings/kioskMenu(id=${kioskMenu.getId()})}"
                    th:text="${kioskMenu.toString()}"></a>
+            </td>
+        </tr>
+    </table>
+    <table th:if="${currentSet=='RunLine'}" border="1px">
+        <a th:href="@{/settings/runline(id=-1)}">Создать новый элемент меню</a>
+        <tr th:each="runLine : ${runLines}">
+            <td>
+                <a th:href="@{/settings/runline(id=${runLine.getId()})}"
+                   th:text="${runLine.toString()}"></a>
             </td>
         </tr>
     </table>

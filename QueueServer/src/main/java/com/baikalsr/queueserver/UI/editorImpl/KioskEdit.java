@@ -20,6 +20,7 @@ public class KioskEdit {
     private String IP;
     private Queue queue;
     private String comment;
+    private boolean test;
     private boolean active;
 
     public ArrayList<Queue> getSelectQueues() {
@@ -55,6 +56,7 @@ public class KioskEdit {
         IP = kiosk.getIP();
         queue = kiosk.getQueue();
         comment = kiosk.getComment();
+        test = kiosk.isTest();
     }
 
     public void rebuildKioskEdit(Kiosk kiosk) {
@@ -63,6 +65,7 @@ public class KioskEdit {
         IP = kiosk.getIP();
         queue = kiosk.getQueue();
         comment = kiosk.getComment();
+        test = kiosk.isTest();
     }
 
     public void updateKioskEdit(KioskEdit kioskEdit) {
@@ -131,5 +134,13 @@ public class KioskEdit {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }

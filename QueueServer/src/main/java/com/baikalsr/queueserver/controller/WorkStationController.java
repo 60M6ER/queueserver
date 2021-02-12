@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 public class WorkStationController {
@@ -31,18 +33,19 @@ public class WorkStationController {
     @Autowired
     private StatusManager statusManager;
 
-    @ModelAttribute("statusManager")
-    public String getStatusManager() {
-        return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
-    }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
     public String getUserName() {
         return securityService.getNameUser();
+    }
+
+    @ModelAttribute("userID")
+    public String getUserID() {
+        return securityService.getUsername();
     }
 
     @ModelAttribute("securityService")
@@ -53,7 +56,7 @@ public class WorkStationController {
 
     @GetMapping("/workStation")
     public String workStation(Model model) {
-        model.addAttribute("workStationUI", workStationUIService.getWorkStationUI());
+        //model.addAttribute("workStationUI", workStationUIService.getWorkStationUI());
         return "workStation";
     }
 

@@ -28,14 +28,27 @@ public class TicketDistribution {
     private ManagerRepo managerRepo;
     @Autowired
     private ManagersStatusRepo managersStatusRepo;
+    @Autowired
+    private ServiceLocker serviceLocker;
+
+    private int countTickets = 0;
+    private long milsec = 0;
 
     @Scheduled(fixedDelay = 5 * 1000)
     public synchronized void distributeTickets() {
+        Long startTime = System.currentTimeMillis();
         List<Ticket> tickets = ticketRepo.findAllToDistrib();
         for (Ticket ticket : tickets) {
             Manager manager = managerRepo.getManagerByTicketServiceToDistrib(ticket.getService().getId(),
                     ticket.getQueue().getId());
             if (manager != null) {
+                try {
+                    if (!serviceLocker.addLock(manager, true)) {
+                        continue;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Date dateEdit = new Date();
                 //Связываем менеджера с талоном
                 ManagerTicket managerTicket = new ManagerTicket();
@@ -54,22 +67,25 @@ public class TicketDistribution {
                 managerTicketRepo.save(managerTicket);
                 ticketRepo.save(ticket);
                 managersStatusRepo.save(managersStatus);
+                serviceLocker.unLock(manager);
                 LOGGER.info("Талон: " + ticket.getName()
                         + " {"
                         + "Очередь: " + ticket.getQueue().getName()
                         + ", Услуга: " + ticket.getService().getName()
                         + "}"
                         + " распределен для менеджера: " + manager.getName());
-            }else {
-                LOGGER.debug("Для талона: " + ticket.getName()
-                    + " нет доступного менеджера.");
             }
+        }
+        if (tickets.size() > 0) {
+            countTickets = tickets.size();
+            milsec = System.currentTimeMillis() - startTime;
         }
     }
 
     public List<Map<String, Object>> getListTickets() {
         ArrayList<Map<String, Object>> list = new ArrayList<>();
-        List<Ticket> tickets = ticketRepo.findAll();
+        //List<Ticket> tickets = ticketRepo.findAll();
+        List<Ticket> tickets = ticketRepo.findAllSorted();
         for (Ticket ticket : tickets) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("name", ticket.getName());
@@ -86,5 +102,13 @@ public class TicketDistribution {
             list.add(map);
         }
         return list;
+    }
+
+    public int getCountTickets() {
+        return countTickets;
+    }
+
+    public long getMilsec() {
+        return milsec;
     }
 }

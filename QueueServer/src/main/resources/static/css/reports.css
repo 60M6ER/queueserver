@@ -1,0 +1,129 @@
+#work_space{
+    position: relative;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: 3px solid black;
+    overflow: hidden;
+}
+
+#report_body{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    background-color: #f3f1ef;
+}
+
+#settings{
+    position: absolute;
+    background-color: #a8d8ff;
+    margin-right: 5px;
+    margin-top: 5px;
+    border-radius: 10px;
+    right: 0;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+#set_logo_block{
+    position: absolute;
+    right: 0;
+    width: 40px;
+    height: 40px;
+}
+
+#logo_settings{
+    margin: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+#settings_body{
+    position: relative;
+    margin: 50px 10px 10px;
+    width: 350px;
+}
+
+#loading_logo{
+    height: 300px;
+}
+
+input[type="number"]{
+    width: 140px;
+}
+
+input[type="button"]{
+    color: white;
+    background-color: #0291d3;
+    border-radius: 7px;
+    font: 15px SFProDisplay-Regular;
+}
+
+
+::-webkit-scrollbar-track {
+    background-color:#ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 0px;
+    border-radius: 5px;
+    background-color:#a8d8ff;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-color:#0291d3;
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+    height: 10px;
+}
+
+#table_report{
+    border-collapse: collapse;
+    margin-top: 50px;
+    margin-left: 20px;
+    font: 13px Arial;
+}
+
+#table_report_head{
+    background-color: #0291d3;
+}
+
+.line1{
+    background-color: #a8d8ff;
+}
+
+.line2{
+    background-color: #e2efda;
+}
+
+.nameGroup{
+    width: 200px;
+}
+
+.data{
+    width: 120px;
+    text-align: center;
+}
+
+.tableBorder{
+    border: 1px solid;
+}
+
+.resultsName{
+    text-align: right;
+}
+
+.folder{
+    background-color: #f3f1ef;
+    padding: 0;
+}
+
+.folderButton{
+    width: 15px;
+    height: 15px;
+    font: 10px Arial;
+    padding: 0;
+    margin-right: 3px;
+}

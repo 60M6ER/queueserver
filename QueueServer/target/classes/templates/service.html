@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <script src="/js/headSite.js"></script>
     <title th:text="'QBS: ' + ${service.getName()}">Настройки услуги</title>
     <style>
         select {
@@ -11,24 +13,15 @@
 </head>
 <body>
 <div class="headSite" align="center">
-    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
-    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Выйти"/>
-    </form>
-    <div class="menu">
-        <table >
-            <tr>
-                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
-                    th:if="${menuUI.getByRole(menuUnit)}">
-                    <a th:href="@{__${menuUnit.get('URL')}__}"
-                       th:text="${menuUnit.get('name')}"></a>
-                </td>
-            </tr>
-        </table>
-        <hr width="95%">
-    </div>
+
 </div>
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
 <div align="left">
     <form action="#" th:action="@{/saveService}" th:object="${service}"  method="post">
         <input hidden type="text" name="id" th:value="*{id}">
@@ -44,6 +37,58 @@
                 <td align="right">Приоритет:</td>
                 <td align="left">
                     <input name="priority" type="text" th:value="*{priority}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Возможность ставить на паузу:</td>
+                <td align="left">
+                    <input name="supportPause" type="checkbox" th:checked="*{supportPause}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Указание контрагента обязательно:</td>
+                <td align="left">
+                    <input name="obligatoryContractor" type="checkbox" th:checked="*{obligatoryContractor}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Показывать в табло:</td>
+                <td align="left">
+                    <input name="displayOnTablo" type="checkbox" th:checked="*{displayOnTablo}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Это услуга Сотрудника БС:</td>
+                <td align="left">
+                    <input name="BSService" type="checkbox" th:checked="*{BSService}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Префикс в номере:</td>
+                <td align="left">
+                    <input name="prefix" type="text" th:value="*{prefix}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Тип услуги:</td>
+                <td align="left">
+                    <select name="status" th:field="*{typeService}">
+                        <option th:each="typeTicket : ${service.getSelectTypeServices()}"
+                                th:value="${typeTicket.name()}"
+                                th:utext="${service.typeServiceToRussian(typeTicket)}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Доступна по статусу:</td>
+                <td align="left">
+                    <select name="status" th:field="*{status}">
+                        <option th:utext="null"
+                                th:value="null"></option>
+                        <option th:each="cstatus : ${service.getSelectStatuses()}"
+                                th:value="${cstatus.name()}"
+                                th:utext="${service.getRussianName(cstatus)}"></option>
+                    </select>
                 </td>
             </tr>
             <tr><td align="right">Менеджеры:</td></tr>

@@ -2,62 +2,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>"Электронная очередь Байкал-сервис"</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/workStation.css}"/>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/headSite.js"></script>
+    <script src="/js/workStation.js"></script>
 </head>
 <body>
-<div class="headSite" align="center">
-    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
-    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Выйти"/>
-    </form>
-    <div class="menu">
-        <table >
-            <tr>
-                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
-                    th:if="${menuUI.getByRole(menuUnit)}">
-                    <a th:href="@{__${menuUnit.get('URL')}__}"
-                       th:text="${menuUnit.get('name')}"></a>
-                </td>
-            </tr>
-        </table>
-        <hr width="95%">
+<div class="headSite" id="headSite" align="center">
+
+</div>
+</div>
+<script th:inline="javascript">
+    userId = [[${userID}]];
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus(userId);
+</script>
+<div align="center">
+    <div class="blockWork" id="elQueue_" align="center">
+
+    </div>
+    <div id="casement_status" class="blockWork">
+
+    </div>
+    <div id="client" class="blockWork">
+
+    </div>
+    <div id="info_queue" class="blockWork">
+
     </div>
 </div>
-
-<div align="center">
-    <form action="#" th:action="@{/WorkSession}" th:object="${workStationUI}" method="post">
-        <input hidden type="text" name="ticketID" th:value="*{ticketID}">
-        <table>
-            <tr>
-                <td>Окно:</td>
-                <th:block th:unless="${workStationUI.isWorking()}">
-                    <td><input type="number" name="casement" th:value="*{casement}"></td>
-                    <td>
-                        <button type="submit" name="startWorkSession" value="1">Начать сессию</button>
-                    </td>
-                </th:block>
-                <th:block th:if="${workStationUI.isWorking()}">
-                    <td><input disabled type="number" name="casement" th:value="*{casement}"></td>
-                    <td>
-                        <button type="submit" name="startWorkSession" value="0">Завершить сессию</button>
-                    </td>
-                </th:block>
-
-            </tr>
-            <tr>
-                <td align="center" colspan="3">
-                    <p th:unless="${workStationUI.getErrorEditSession()==''}" th:text="*{errorEditSession}" class="error"></p>
-                </td>
-            </tr>
-
-        </table>
-        <th:block th:if="${workStationUI.isTicketServicing()}">
-            <h3 th:text="'Вам ' + ${workStationUI.getTypeDistributionToString()} + ' талон: ' + ${workStationUI.ticketToString()}"></h3>
-            <button th:if="${workStationUI.isWaiting()}" type="submit" name="serviceClient" value="1">Принять клиента</button>
-            <button th:if="${workStationUI.isServicing()}" type="submit" name="serviceClient" value="0">Завершить обслуживание</button>
-        </th:block>
-    </form>
-</div>
-
+<script th:inline="javascript">
+    updatePage(userId);
+    csrf_token = [[${_csrf.token}]];
+</script>
 </body>
 </html>

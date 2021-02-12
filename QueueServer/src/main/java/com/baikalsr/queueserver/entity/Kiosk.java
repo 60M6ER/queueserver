@@ -23,6 +23,11 @@ public class Kiosk {
     private String comment;
 
     private boolean active;
+    private boolean test;
+
+    @Enumerated(EnumType.STRING)
+    private StatusDevice statusDevice;
+    private String errorMessage;
 
     public Kiosk() {
     }
@@ -34,6 +39,7 @@ public class Kiosk {
         queue = kioskEdit.getQueue();
         comment = kioskEdit.getComment();
         active = kioskEdit.isActive();
+        test = kioskEdit.isTest();
     }
 
     public String getComment() {
@@ -78,6 +84,30 @@ public class Kiosk {
 
     public void setIP(String IP) {
         this.IP = IP;
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
+    }
+
+    public StatusDevice getStatusDevice() {
+        return statusDevice;
+    }
+
+    public void setStatusDevice(StatusDevice statusDevice) {
+        this.statusDevice = statusDevice;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     @Override

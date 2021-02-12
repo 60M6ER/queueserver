@@ -45,6 +45,11 @@ public class KioskRestController {
         return kioskService.getServices(req.getRemoteAddr(), Long.parseLong(req.getParameter("id")));
     }
 
+    @GetMapping(value = "/clickservice", params = {"idService"})
+    private ServiceList clickSubmitService(HttpServletRequest req) {
+        return kioskService.getServices(req.getRemoteAddr(), Long.parseLong(req.getParameter("idService")));
+    }
+
     @GetMapping(value = "/clickservice", params = {"id", "yesno"})
     private ServiceList clickYesNoSubmit(HttpServletRequest req) {
         return kioskService.getServices(req.getRemoteAddr(), Long.parseLong(req.getParameter("id")), req.getParameter("yesno"));

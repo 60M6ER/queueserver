@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 public class ServiceController {
@@ -44,8 +46,8 @@ public class ServiceController {
         return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
     }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
@@ -87,7 +89,7 @@ public class ServiceController {
 
         model.addAttribute("service", serviceEdit);
         model.addAttribute("errorPass", "");
-        return "/service";
+        return "service";
     }
 
     @RequestMapping(value = "/saveService", params = {"delManager"}, method = RequestMethod.POST)
@@ -97,7 +99,7 @@ public class ServiceController {
         serviceEdit.updateServiceEdit(serviceEditPool);
         model.addAttribute("service", serviceEdit);
         model.addAttribute("errorPass", "");
-        return "/service";
+        return "service";
     }
 
     @RequestMapping(value = "/saveService", params = {"save"}, method = RequestMethod.POST)
@@ -109,6 +111,6 @@ public class ServiceController {
         TicketService ticketService = new TicketService(serviceEdit);
         ticketServiceRepo.save(ticketService);
         UISettings.poolEditObjects.remove(serviceEdit.getUUID());
-        return "/settings";
+        return "redirect:/settings";
     }
 }

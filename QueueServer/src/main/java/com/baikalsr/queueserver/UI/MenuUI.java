@@ -23,8 +23,12 @@ public class MenuUI {
 
         HashSet<Role> rolesAll = new HashSet<>();
         rolesAll.add(Role.USER);
-        HashSet<Role> rolesAdmin = new HashSet<>();
+        rolesAll.add(Role.MANAGER);
         rolesAll.add(Role.ADMINISTRATOR);
+        HashSet<Role> rolesAdmin = new HashSet<>();
+        rolesAdmin.add(Role.ADMINISTRATOR);
+        HashSet<Role> rolesManager = new HashSet<>();
+        rolesManager.add(Role.MANAGER);
 
         setMenuUnit();
         menuUnit.put("name", "Главная");
@@ -33,9 +37,21 @@ public class MenuUI {
         menuStruct.add(getMenuUnit());
 
         setMenuUnit();
+        menuUnit.put("name", "Администрирование");
+        menuUnit.put("URL", "/administration");
+        menuUnit.put("Roles", rolesManager);
+        menuStruct.add(getMenuUnit());
+
+        setMenuUnit();
+        menuUnit.put("name", "Отчетность");
+        menuUnit.put("URL", "/reports");
+        menuUnit.put("Roles", rolesManager);
+        menuStruct.add(getMenuUnit());
+
+        setMenuUnit();
         menuUnit.put("name", "Рабочее место оператора");
         menuUnit.put("URL", "/workStation");
-        menuUnit.put("Roles", rolesAll);
+        menuUnit.put("Roles", rolesAdmin);
         menuStruct.add(getMenuUnit());
 
         setMenuUnit();
@@ -48,17 +64,26 @@ public class MenuUI {
     public boolean getByRole(Integer index) {
         HashSet<Role> rolesFind = (HashSet<Role>) menuStruct.get(index).get("Roles");
 
-        return securityService.testByRolesUser(rolesFind);
+        return securityService.testByRolesUser(rolesFind, null, true);
     }
 
     public boolean getByRole(HashMap<String, Object> menuUnit) {
         HashSet<Role> rolesFind = (HashSet<Role>) menuUnit.get("Roles");
 
-        return securityService.testByRolesUser(rolesFind);
+        return securityService.testByRolesUser(rolesFind, null, true);
     }
 
     public ArrayList<HashMap<String, Object>> getMenuStruct() {
         return menuStruct;
+    }
+
+    public ArrayList<HashMap<String, Object>> getMenuStructByRoles() {
+        ArrayList<HashMap<String, Object>> struct = new ArrayList<>();
+        for (int i = 0; i < menuStruct.size(); i++) {
+            if (securityService.testByRolesUser((HashSet<Role>) menuStruct.get(i).get("Roles"), null, true))
+                struct.add(menuStruct.get(i));
+        }
+        return struct;
     }
 
     public void setMenuStruct(ArrayList<HashMap<String, Object>> menuStruct) {

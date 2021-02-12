@@ -19,12 +19,14 @@ public class CreatorTicket {
 
     @Autowired
     private TicketRepo ticketRepo;
+    @Autowired
+    private NumeratorService numeratorService;
 
     private int indexTicket = 1;
 
     public Ticket createTicket(TicketService service, Queue queue) {
         Ticket ticket = new Ticket();
-        ticket.setName(service.getName().substring(0,2).toUpperCase() + " " + (indexTicket++));
+        ticket.setName(numeratorService.getNumber(service, queue));
         ticket.setDateCreate(new Date());
         ticket.setStatus(TicketStatus.PRINTING);
         ticket.setQueue(queue);
@@ -32,11 +34,29 @@ public class CreatorTicket {
 
 
 
-        ticketRepo.save(ticket);
+        ticket = ticketRepo.save(ticket);
         LOGGER.info("Создан талон: " + ticket.getName()
             + " {Очередь: " + queue.getName()
             + ", Услуга: " + service.getName()
             + "}");
+        return ticket;
+    }
+
+    public Ticket createRegularTicket(TicketService service, Queue queue) {
+        Ticket ticket = new Ticket();
+        ticket.setName(numeratorService.getNumber(service, queue));
+        ticket.setDateCreate(new Date());
+        ticket.setStatus(TicketStatus.SERVICING);
+        ticket.setQueue(queue);
+        ticket.setService(service);
+
+
+
+        ticket = ticketRepo.save(ticket);
+        LOGGER.info("Создан талон: " + ticket.getName()
+                + " {Очередь: " + queue.getName()
+                + ", Услуга: " + service.getName()
+                + "}");
         return ticket;
     }
 }

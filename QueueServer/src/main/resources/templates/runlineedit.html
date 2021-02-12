@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <script src="/js/headSite.js"></script>
+    <title th:text="'QBS: ' + ${runLine.getName()}">Табло</title>
+    <style>
+        select {
+            width: 300px; /* Ширина списка в пикселах */
+        }
+    </style>
+</head>
+<body>
+<div class="headSite" align="center">
+
+</div>
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
+<div align="left">
+    <form action="#" th:action="@{/saveRunLine}" th:object="${runLine}"  method="post">
+        <input hidden type="text" name="id" th:value="*{id}">
+        <input hidden type="text" name="UUID" th:value="*{UUID}">
+        <table>
+            <tr>
+                <td align="right">Название:</td>
+                <td align="left">
+                    <input name="name" type="text" th:value="*{name}">
+                </td>
+            </tr>
+            <td align="right">Текст строки:</td>
+                <td align="left">
+                    <input name="text" type="text" th:value="*{text}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Включена:</td>
+                <td align="left">
+                    <input name="active" type="checkbox" th:checked="*{active}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Не использовать срок действия:</td>
+                <td align="left">
+                    <input name="nonDate" type="checkbox" th:checked="*{nonDate}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Дата начала:</td>
+                <td align="left">
+                    <input name="startDate" type="date" th:value="*{#dates.format(startDate, 'yyyy-MM-dd')}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Дата окончания:</td>
+                <td align="left">
+                    <input name="endDate" type="date" th:value="*{#dates.format(endDate, 'yyyy-MM-dd')}">
+                </td>
+            </tr>
+            <tr th:if="${errorPass!=''}"><td th:text="${errorPass}"></td></tr>
+            <tr>
+                <td align="right"><button type="submit" name="save">Сохранить</button></td>
+                <td align="left">
+                    <a href="/settings?currentSet=RunLine">Отмена</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>

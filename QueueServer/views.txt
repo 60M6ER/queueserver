@@ -1,0 +1,114 @@
+CREATE OR REPLACE VIEW tickets_queue_and_statuses_managers AS
+WITH tickets_managers AS(
+	SELECT 
+	t.id,
+	t.date_create, 
+	t.date_distrib, 
+	t.date_end_service, 
+	t.date_start_service, 
+	t.name as name, 
+	t.status, 
+	t.queue_id,
+	mt.manager_id,
+	m.name as name_manager
+	FROM ticket t LEFT OUTER JOIN manager_ticket mt
+	ON(t.id = mt.ticket_id)
+	LEFT OUTER JOIN manager m
+	ON(mt.manager_id = m.id)
+	WHERE t.status IN (0,1,2)
+),
+managers_last_dates AS(
+SELECT  
+	max(date) AS date, 
+	manager_id
+FROM managers_status
+	where manager_id IN (SELECT manager_id FROM tickets_managers
+						WHERE not manager_id  ISNULL)
+GROUP BY manager_id),
+manager_status AS(
+SELECT  
+	ms.casement,
+	ms.manager_id
+FROM managers_status ms JOIN managers_last_dates mld
+	ON(ms.manager_id = mld.manager_id
+	  AND ms.date = mld.date)
+)
+	
+SELECT  
+	tm.id,
+	tm.date_create, 
+	tm.date_distrib, 
+	tm.date_end_service, 
+	tm.date_start_service, 
+	tm.name, 
+	tm.status, 
+	tm.queue_id,
+	tm.name_manager,
+	ms.casement
+FROM tickets_managers tm LEFT OUTER JOIN manager_status ms
+ON(tm.manager_id = ms.manager_id)
+ORDER BY tm.date_create;
+ALTER VIEW tickets_queue_and_statuses_managers OWNER TO "queueServer";
+
+CREATE OR REPLACE VIEW managers_statuses AS
+WITH managers AS(
+	SELECT *
+	FROM manager
+	WHERE active),
+	last_statuses AS(
+	SELECT
+		MAX(date) AS date,
+		manager_id
+	FROM managers_status
+	GROUP BY manager_id)
+	
+SELECT 
+	m.id,
+	m.loginad,
+	m.name,
+	m.queue_id,
+	ms.date,
+	ms.casement,
+	ms.status
+FROM managers m LEFT OUTER JOIN last_statuses ls
+ON (m.id = ls.manager_id)
+LEFT OUTER JOIN managers_status ms
+ON (m.id = ms.manager_id
+   AND ls.date = ms.date);
+ALTER VIEW managers_statuses OWNER TO "queueServer";   
+
+CREATE OR REPLACE VIEW tickets_with_managers AS
+SELECT 
+	t.id,
+	t.date_create, 
+	t.date_distrib, 
+	t.date_end_service, 
+	t.date_start_service, 
+	t.name as name, 
+	t.status, 
+	t.queue_id,
+	mt.manager_id,
+	m.name AS name_manager,
+	ts.name AS service,
+	q.name AS queue,
+	tse.selling_number,
+	t.comment,
+	t.name_client,
+	t.ticket_service_id,
+	t.contractor_id,
+	t.date_printed,
+	c.name AS contractor_name
+	FROM ticket t LEFT OUTER JOIN manager_ticket mt
+	ON(t.id = mt.ticket_id)
+	LEFT OUTER JOIN manager m
+	ON(mt.manager_id = m.id)
+	LEFT OUTER JOIN ticket_service ts
+	ON(t.ticket_service_id = ts.id)
+	LEFT OUTER JOIN contractors c
+	ON(t.contractor_id = c.id)
+	LEFT OUTER JOIN queue q
+	ON(t.queue_id = q.id)
+	LEFT OUTER JOIN ticket_selling tse
+	ON(t.id = tse.ticket)
+ORDER BY t.date_create;
+ALTER VIEW tickets_with_managers OWNER TO "serverQueue";

@@ -64,4 +64,13 @@ public class ManagersStatus {
         this.status = status;
         return this;
     }
+
+    @Override
+    public ManagersStatus clone() {
+        ManagersStatus newManagerStatus = new ManagersStatus();
+        newManagerStatus.casement = this.getCasement();
+        newManagerStatus.manager = this.getManager();
+        newManagerStatus.status = this.getStatus();
+        return newManagerStatus;
+    }
 }

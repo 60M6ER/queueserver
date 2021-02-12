@@ -17,9 +17,19 @@ public class TicketService {
 
     private int priority;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private List<Manager> managers;
+
+    private boolean isPause;
+    private boolean obligatoryContractor;
+    private boolean displayOnTablo;
+    private boolean BSService;
+
+    @Enumerated(EnumType.STRING)
+    private TypeService TypeStr;
+    private String prefix;
+    private Status status;
 
 
     public TicketService() {
@@ -30,6 +40,13 @@ public class TicketService {
         name = serviceEdit.getName();
         priority = serviceEdit.getPriority();
         managers = serviceEdit.getManagers();
+        isPause = serviceEdit.isSupportPause();
+        status = serviceEdit.getStatus();
+        obligatoryContractor = serviceEdit.isObligatoryContractor();
+        displayOnTablo = serviceEdit.isDisplayOnTablo();
+        prefix = serviceEdit.getPrefix();
+        BSService = serviceEdit.isBSService();
+        TypeStr = serviceEdit.getTypeService();
     }
 
     public Long getId() {
@@ -58,6 +75,62 @@ public class TicketService {
 
     public List<Manager> getManagers() {
         return managers;
+    }
+
+    public boolean isPause() {
+        return isPause;
+    }
+
+    public void setPause(boolean pause) {
+        this.isPause = pause;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public boolean isObligatoryContractor() {
+        return obligatoryContractor;
+    }
+
+    public void setObligatoryContractor(boolean obligatoryContractor) {
+        this.obligatoryContractor = obligatoryContractor;
+    }
+
+    public boolean isDisplayOnTablo() {
+        return displayOnTablo;
+    }
+
+    public void setDisplayOnTablo(boolean displayOnTablo) {
+        this.displayOnTablo = displayOnTablo;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public boolean isBSService() {
+        return BSService;
+    }
+
+    public void setBSService(boolean BSService) {
+        this.BSService = BSService;
+    }
+
+    public TypeService getTypeStr() {
+        return TypeStr;
+    }
+
+    public void setTypeStr(TypeService typeStr) {
+        TypeStr = typeStr;
     }
 
     @Override

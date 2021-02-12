@@ -8,6 +8,7 @@ import com.baikalsr.queueserver.entity.Role;
 import com.baikalsr.queueserver.repository.ManagerRepo;
 import com.baikalsr.queueserver.repository.QueueRepo;
 import com.baikalsr.queueserver.repository.TicketServiceRepo;
+import com.baikalsr.queueserver.service.AuthProvider;
 import com.baikalsr.queueserver.service.SecurityService;
 import com.baikalsr.queueserver.service.StatusManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 public class ManagerController {
@@ -34,7 +37,8 @@ public class ManagerController {
     private UserEdit userEdit;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthProvider authProvider;
+
 
     //Обеспечание шапки страниц
     @Autowired
@@ -50,8 +54,8 @@ public class ManagerController {
         return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
     }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
@@ -94,7 +98,7 @@ public class ManagerController {
         model.addAttribute("manager", userEdit);
         model.addAttribute("queues", queueRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/user";
+        return "user";
     }
 
     @RequestMapping(value = "/saveUser", params = {"delRole"}, method = RequestMethod.POST)
@@ -105,7 +109,7 @@ public class ManagerController {
         model.addAttribute("manager", userEdit);
         model.addAttribute("queues", queueRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/user";
+        return "user";
     }
 
     @RequestMapping(value = "/saveUser", params = {"addService"}, method = RequestMethod.POST)
@@ -119,7 +123,7 @@ public class ManagerController {
         model.addAttribute("manager", userEdit);
         model.addAttribute("queues", queueRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/user";
+        return "user";
     }
 
     @RequestMapping(value = "/saveUser", params = {"delService"}, method = RequestMethod.POST)
@@ -130,7 +134,7 @@ public class ManagerController {
         model.addAttribute("manager", userEdit);
         model.addAttribute("queues", queueRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/user";
+        return "user";
     }
 
     @RequestMapping(value = "/saveUser", params = {"save"}, method = RequestMethod.POST)
@@ -145,22 +149,22 @@ public class ManagerController {
         else
             managerDB = managerRepo.getOne(userEdit.getId());
         if (!userEdit.getNewPassword().equals("")) {
-            if (passwordEncoder.matches(userEdit.getCurrentPassword(), managerDB.getPassword()) || managerDB.getPassword()==null) {
+            if (authProvider.matches(userEdit.getCurrentPassword(), managerDB.getPassword()) || managerDB.getPassword()==null) {
                 if (!userEdit.getNewPassword().equals(userEdit.getRepitPassword())) {
                     model.addAttribute("errorPass", "Пароли не совпадают");
-                    return "/user";
+                    return "user";
                 }else {
-                    userEdit.setNewSecurityPass(passwordEncoder.encode(userEdit.getNewPassword()));
+                    userEdit.setNewSecurityPass(authProvider.encodePassword(userEdit.getNewPassword()));
                 }
             } else {
                 model.addAttribute("errorPass", "Введен не правильный пароль.");
-                return "/user";
+                return "user";
             }
         }
         userEdit.setCurrentPassword(managerDB.getPassword());
         Manager manager = new Manager(userEdit);
         managerRepo.save(manager);
         UISettings.poolEditObjects.remove(userEdit.getUUID());
-        return "/settings";
+        return "redirect:/settings";
     }
 }

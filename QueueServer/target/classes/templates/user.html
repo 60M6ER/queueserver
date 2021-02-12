@@ -2,6 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <script src="/js/headSite.js"></script>
     <title th:text="'QBS: ' + ${manager.getName()}">Настройки пользователя</title>
     <style>
         select {
@@ -11,24 +13,15 @@
 </head>
 <body>
 <div class="headSite" align="center">
-    <h1 th:text="'Сотрудник: ' + ${nameUser} + '.'">Привет, Гость!</h1>
-    <h4 th:text="'Статус: ' + ${statusManager} + '.'"></h4>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Выйти"/>
-    </form>
-    <div class="menu">
-        <table >
-            <tr>
-                <td th:each="menuUnit, state : ${menuUI.getMenuStruct()}"
-                    th:if="${menuUI.getByRole(menuUnit)}">
-                    <a th:href="@{__${menuUnit.get('URL')}__}"
-                       th:text="${menuUnit.get('name')}"></a>
-                </td>
-            </tr>
-        </table>
-        <hr width="95%">
-    </div>
+
 </div>
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
 <div align="left">
     <form action="#" th:action="@{/saveUser}" th:object="${manager}"  method="post">
         <input hidden type="text" name="id" th:value="*{id}">
@@ -86,7 +79,7 @@
 
             <tr><td>
                 <table border="1px">
-                    <tr name="services" th:each="service,state : *{ticketServices}">
+                    <tr th:each="service,state : *{ticketServices}">
                         <td th:text="${state.count}"></td>
                         <td>
                             <input disabled type="text" name="service" th:value="*{ticketServices[__${state.index}__].getName()}">
@@ -106,7 +99,7 @@
             </tr>
             <tr><td>
                 <table border="1px">
-                    <tr name="roles" th:each="role,state : *{roles}">
+                    <tr th:each="role,state : *{roles}">
                         <td th:text="${state.count}"></td>
                         <td>
                             <input disabled type="text" name="role" th:value="*{roles[__${state.index}__].name()}">
@@ -114,6 +107,7 @@
                         <td>
                             <button type="submit" th:value="*{roles[__${state.index}__].name()}" name="delRole">Удалить</button>
                         </td>
+
 
                     </tr>
                 </table>

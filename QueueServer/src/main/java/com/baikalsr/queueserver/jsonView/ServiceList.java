@@ -7,6 +7,7 @@ public class ServiceList {
     private String type;
     private Long idMenu;
     private String message;
+    private Long idBSService;
     private List<MenuUnitService> list;
 
 
@@ -51,5 +52,13 @@ public class ServiceList {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Long getIdBSService() {
+        return idBSService;
+    }
+
+    public void setIdBSService(Long idBSService) {
+        this.idBSService = idBSService;
     }
 }

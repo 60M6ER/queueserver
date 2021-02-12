@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 public class QueueController {
@@ -45,8 +47,8 @@ public class QueueController {
         return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
     }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
@@ -89,7 +91,7 @@ public class QueueController {
         model.addAttribute("queue", queueEdit);
         model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/queue";
+        return "queue";
     }
 
     @RequestMapping(value = "/saveQueue", params = {"delManager"}, method = RequestMethod.POST)
@@ -100,7 +102,7 @@ public class QueueController {
         model.addAttribute("queue", queueEdit);
         model.addAttribute("kioskMenus", kioskMenuRepo.findAll());
         model.addAttribute("errorPass", "");
-        return "/queue";
+        return "queue";
     }
 
     @RequestMapping(value = "/saveQueue", params = {"save"}, method = RequestMethod.POST)
@@ -113,6 +115,6 @@ public class QueueController {
         Queue queue = new Queue(queueEdit);
         queueRepo.save(queue);
         UISettings.poolEditObjects.remove(queueEdit.getUUID());
-        return "/settings";
+        return "redirect:/settings";
     }
 }

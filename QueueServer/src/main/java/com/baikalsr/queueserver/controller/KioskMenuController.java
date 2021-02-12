@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Controller
 public class KioskMenuController {
@@ -43,8 +45,8 @@ public class KioskMenuController {
         return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
     }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
@@ -107,6 +109,6 @@ public class KioskMenuController {
         KioskMenu kioskMenu = new KioskMenu(kioskMenuEdit);
         kioskMenuRepo.save(kioskMenu);
         UISettings.poolEditObjects.remove(kioskMenuEdit.getUUID());
-        return "/settings";
+        return "redirect:/settings";
     }
 }

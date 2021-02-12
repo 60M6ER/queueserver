@@ -11,14 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private AuthProvider authProvider;
+    @Autowired
+    private MyBasicAuthenticationEntryPoint basicAuthenticationEntryPoint;
 
     @Bean
     UserService userService() {
@@ -45,10 +47,12 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/login**", "/registration", "/kiosk"
-                , "/setCommentKiosk", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.woff2", "/**/*.woff", "/**/*.ttf", "/kioskt/*").permitAll()
+                        , "/setCommentKiosk", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.mp3", "/**/*.woff2", "/**/*.woff", "/**/*.ttf", "/kioskt/*",
+                        "/tablo", "/rest/tablo/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/").failureUrl("/login?error").permitAll()
-                .and().logout().logoutSuccessUrl("/login").permitAll();
+                .and().logout().logoutSuccessUrl("/login").permitAll()
+                .and().csrf().ignoringAntMatchers("/rest/**").and().httpBasic().authenticationEntryPoint(basicAuthenticationEntryPoint);
     }
 }

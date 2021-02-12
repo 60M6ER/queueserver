@@ -22,6 +22,8 @@ public class Queue {
 
     private int timeInform;
 
+    private boolean active;
+
     @ManyToOne
     @JoinColumn(name = "kioskMenu_id")
     private KioskMenu kioskMenu;
@@ -106,9 +108,22 @@ public class Queue {
         return numerator;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        return this.id == ((Queue) obj).id;
+        try {
+            return this.id == ((Queue) obj).id;
+        }catch (Exception e){
+            return false;
+        }
+
     }
     @Override
     public String toString() {

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class KioskUI {
     private boolean registered;
+    private boolean test;
     private List<KioskMenu> menus;
     private String comment;
 
@@ -16,6 +17,7 @@ public class KioskUI {
     public KioskUI(Kiosk kiosk) {
         this.registered = !kiosk.getName().equals("Незарегистрированное устройство");
         this.comment = kiosk.getComment();
+        this.test = kiosk.isTest();
     }
 
 
@@ -24,7 +26,7 @@ public class KioskUI {
     /////////////////////////////////////////////////////////////////
 
     public boolean isRegistered() {
-        return registered;
+        return registered || test;
     }
 
     public void setRegistered(boolean registered) {

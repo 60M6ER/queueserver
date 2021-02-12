@@ -1,12 +1,13 @@
 package com.baikalsr.queueserver.entity;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class TicketSelling {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private UUID id;
 
     private String sellingNumber;
 
@@ -14,11 +15,11 @@ public class TicketSelling {
     @JoinColumn(name = "ticket")
     private Ticket ticket;
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

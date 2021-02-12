@@ -1,3 +1,7 @@
 # Default ignored files
-/queueserver.iml
+.idea
+*.iws
+*.iml
+*.ipr
+/out
 /target

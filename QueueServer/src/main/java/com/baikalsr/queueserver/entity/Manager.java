@@ -1,15 +1,7 @@
 package com.baikalsr.queueserver.entity;
 
-import com.baikalsr.queueserver.UI.TableEditor;
-import com.baikalsr.queueserver.UI.UIEditEntities;
-import com.baikalsr.queueserver.UI.editorImpl.FieldsObject;
-import com.baikalsr.queueserver.UI.editorImpl.TypeField;
 import com.baikalsr.queueserver.UI.editorImpl.UserEdit;
-import com.baikalsr.queueserver.repository.ManagerRepo;
-import com.baikalsr.queueserver.repository.QueueRepo;
-import com.sun.istack.Interned;
 import com.sun.istack.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -34,6 +26,9 @@ public class Manager implements UserDetails {
 
     private boolean active;
 
+    @NotNull
+    private String restToken;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -43,7 +38,7 @@ public class Manager implements UserDetails {
     @JoinColumn(name = "queue_id")
     private Queue queue;
 
-    @ManyToMany(mappedBy = "managers", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "managers", fetch = FetchType.LAZY)
     private List<TicketService> ticketServices;
 
     public Manager() {
@@ -96,15 +91,11 @@ public class Manager implements UserDetails {
     @Override
     public boolean equals(Object o)
     {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-        Manager manager = (Manager) o;
-        return isActive() == manager.isActive() &&
-                Objects.equals(getId(), manager.getId()) &&
-                Objects.equals(getUsername(), manager.getUsername()) &&
-                Objects.equals(getPassword(), manager.getPassword()) &&
-                Objects.equals(getName(), manager.getName()) &&
-                Objects.equals(getRoles(), manager.getRoles());
+        try {
+            return this.id == ((Manager) o).getId();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -186,5 +177,13 @@ public class Manager implements UserDetails {
 
     public void setTicketServices(List<TicketService> ticketServices) {
         this.ticketServices = ticketServices;
+    }
+
+    public String getRestToken() {
+        return restToken;
+    }
+
+    public void setRestToken(String restToken) {
+        this.restToken = restToken;
     }
 }

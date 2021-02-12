@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @NotNull
     private String name;
@@ -44,11 +44,15 @@ public class Ticket {
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketSelling> ticketSellings;
 
-    public Long getId() {
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "contractor_id", referencedColumnName = "id")
+    private Contractor contractor;
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -159,6 +163,25 @@ public class Ticket {
     public List<TicketSelling> getTicketSellings() {
         return ticketSellings;
     }
+
+    public Contractor getContractor() {
+        return contractor;
+    }
+
+    public void setContractor(Contractor contractor) {
+        this.contractor = contractor;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        try {
+            return this.id == ((Ticket) obj).id;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+
     @Override
     public String toString() {
         return name;

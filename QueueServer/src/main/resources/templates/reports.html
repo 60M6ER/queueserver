@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>"Отчеты"</title>
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/reports.css}"/>
+    <link rel="stylesheet" type="text/css" th:href ="@{/css/headStyle.css}"/>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/headSite.js"></script>
+    <script src="/js/reports.js"></script>
+    <script src="/js/cookie.js"></script>
+</head>
+<body>
+<div class="headSite" id="headSite" align="center">
+
+</div>
+
+<script th:inline="javascript">
+    csrf_token = [[${_csrf.token}]];
+    name_user = [[${nameUser}]];
+    menu_struct = [[${menuUI}]];
+    draw_head();
+    updateStatus([[${userID}]]);
+</script>
+
+<div id="work_space">
+    <div id="report_body">
+        <img hidden src="/img/loading_logo.gif" id="loading_logo">
+    </div>
+    <div id="settings">
+        <div id="set_logo_block" onclick="click_settings()">
+            <img src="/img/settings_logo.png" id="logo_settings">
+        </div>
+        <div id="settings_body">
+            <form id="settings_form">
+                <table>
+                    <tr>
+                        <td>
+                            Дата начала:
+                        </td>
+                        <td align="left">
+                            <input id="start_date" type="datetime-local" name="start_date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="error_message" id="start_date_error">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            Дата окончания:
+                        </td>
+                        <td align="left">
+                            <input id="end_date" type="datetime-local" name="end_date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="error_message" id="end_date_error">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2"><br>Нормативы ожидания клиентом:<br></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Норма (мин):
+                        </td>
+                        <td align="left">
+                            <input id="norm" type="number" name="norm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="error_message" id="norm_error">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            Сверхнорма (мин):
+                        </td>
+                        <td align="left">
+                            <input id="over_norm" type="number" name="over_norm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="error_message" id="over_norm_error">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            Критическая норма (мин):
+                        </td>
+                        <td align="left">
+                            <input id="crit_norm" type="number" name="crit_norm">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="error_message" id="crit_norm_error">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <input type="button" name="execute" value="Сформировать" onclick="click_execute()">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    init_reportsPage();
+</script>
+</body>
+</html>

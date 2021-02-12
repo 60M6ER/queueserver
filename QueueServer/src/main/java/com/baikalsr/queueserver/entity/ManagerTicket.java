@@ -2,13 +2,14 @@ package com.baikalsr.queueserver.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 public class ManagerTicket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @OneToOne
     @JoinColumn(name = "manager_id")
@@ -23,11 +24,11 @@ public class ManagerTicket {
     @Enumerated(EnumType.STRING)
     private TypeDistribution typeDistribution;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

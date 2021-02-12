@@ -7,11 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Repository
-public interface ManagerTicketRepo extends JpaRepository<ManagerTicket, Long> {
+public interface ManagerTicketRepo extends JpaRepository<ManagerTicket, UUID> {
 
     @Query(value = "select * from manager_ticket m where m.ticket_id = :ticketId order by m.date desc limit 1",
     nativeQuery = true)
-    ManagerTicket getLastByTicketId(@Param("ticketId") Long ticketId);
+    ManagerTicket getLastByTicketId(@Param("ticketId") UUID ticketId);
 }

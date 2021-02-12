@@ -19,7 +19,7 @@ public class PrintService {
 
     private final byte[] initPrinter = new byte[]{0x1B, '@'}; //Сбрасывает все установленные настройки
     private final byte[] cancelChines = new byte[]{0x1C, 0x2E};
-    private final byte[] setWCP1251 = new byte[]{0x1B, 0x74, 6}; //Установка кодировки WCP-1251
+    private final byte[] setWCP1251 = new byte[]{0x1B, 0x74, 0x06}; //Установка кодировки WCP-1251
     private final byte[] setAlignLeft = new byte[]{0x1B, 0x61, 0};
     private final byte[] setAlignCenter = new byte[]{0x1B, 0x61, 1};
     private final byte[] setAlignRight = new byte[]{0x1B, 0x61, 2};

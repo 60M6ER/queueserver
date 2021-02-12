@@ -1,0 +1,33 @@
+create table if not exists tablo_COPY
+(
+    id bigint not null
+        constraint tablo_COPY_pkey
+            primary key,
+    ip varchar(255),
+    active boolean not null,
+    comment varchar(255),
+    count_lines_on_page integer not null,
+    landscape integer not null,
+    name varchar(255),
+    update boolean not null,
+    queue_id bigint
+        constraint fk6yvxnqabep1st65x4uwq5vk7r
+            references queue,
+    error_message varchar(255),
+    status_device varchar(255),
+    test boolean
+);
+
+alter table tablo_COPY owner to "queueServer";
+
+insert into tablo_COPY select * from tablo;
+
+truncate tablo;
+
+alter table tablo add column version_tablo_page int4 not null;
+alter table tablo add column run_lines_on boolean not null;
+
+insert into tablo select id, ip, active, comment, count_lines_on_page, landscape, name, update, queue_id, error_message, status_device, test, 1, false from tablo_COPY ;
+
+drop table tablo_COPY;
+

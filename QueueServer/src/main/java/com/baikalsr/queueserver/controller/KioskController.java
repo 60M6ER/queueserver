@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @Controller
 public class KioskController {
     @Autowired
@@ -29,9 +32,6 @@ public class KioskController {
     private KioskRepo kioskRepo;
     @Autowired
     private KioskEdit kioskEdit;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     //Обеспечание шапки страниц
     @Autowired
@@ -47,8 +47,8 @@ public class KioskController {
         return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
     }
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
@@ -88,6 +88,6 @@ public class KioskController {
         Kiosk kiosk = new Kiosk(kioskEdit);
         kioskRepo.save(kiosk);
         UISettings.poolEditObjects.remove(kioskEdit.getUUID());
-        return "/settings";
+        return "redirect:/settings";
     }
 }

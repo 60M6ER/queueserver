@@ -5,10 +5,7 @@ import com.baikalsr.queueserver.entity.*;
 import com.baikalsr.queueserver.jsonView.StatusJobPrinted;
 import com.baikalsr.queueserver.jsonView.MenuUnitService;
 import com.baikalsr.queueserver.jsonView.ServiceList;
-import com.baikalsr.queueserver.repository.KioskMenuRepo;
-import com.baikalsr.queueserver.repository.KioskRepo;
-import com.baikalsr.queueserver.repository.QueueRepo;
-import com.baikalsr.queueserver.repository.TicketRepo;
+import com.baikalsr.queueserver.repository.*;
 import com.baikalsr.queueserver.service.CreatorTicket;
 import com.baikalsr.queueserver.service.KioskService;
 import com.baikalsr.queueserver.service.PrintService;
@@ -19,12 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class KioskServiceIMPL implements KioskService {
     private static final Logger LOGGER = LoggerFactory.getLogger(KioskServiceIMPL.class);
-
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     @Autowired
     private KioskRepo kioskRepo;
     @Autowired
@@ -36,7 +36,11 @@ public class KioskServiceIMPL implements KioskService {
     @Autowired
     private TicketRepo ticketRepo;
     @Autowired
+    private TicketServiceRepo ticketServiceRepo;
+    @Autowired
     private PrintService printService;
+
+    private TicketService bsService;
 
     /////////////////////////////////////////////////////////////////
     //Публичные методы
@@ -91,8 +95,26 @@ public class KioskServiceIMPL implements KioskService {
 
         //Проверим принтер
         Printer printer = printService.getPrinter(kiosk);
-        if (!printer.isWorking())
+        if (!kiosk.isTest() && !printer.isWorking())
             return new ServiceList("Принтер не работает. Адрес принтера: " + printer.getURL());
+
+        if (printer.getStatusPaper() == StatusPrinter.PRINT_HEAD_BAD) {
+            kiosk.setStatusDevice(StatusDevice.NOT_OK);
+            kiosk.setErrorMessage(String.format("%s.Перегрев печатающей головки", dateFormat.format(new Date())));
+        }else if (printer.getStatusPaper() == StatusPrinter.CUTTER_ERROR) {
+            kiosk.setStatusDevice(StatusDevice.NOT_OK);
+            kiosk.setErrorMessage(String.format("%s.Проблемы с ножом", dateFormat.format(new Date())));
+        }else if  (printer.getStatusPaper() == StatusPrinter.WILL_NO_PAPER) {
+            kiosk.setStatusDevice(StatusDevice.MAYBE_NOT_OK);
+            kiosk.setErrorMessage(String.format("%s.Скоро закончится бумага", dateFormat.format(new Date())));
+        }else if  (printer.getStatusPaper() == StatusPrinter.NO_PAPER) {
+            kiosk.setStatusDevice(StatusDevice.NOT_OK);
+            kiosk.setErrorMessage(String.format("%s.Закончилась бумага", dateFormat.format(new Date())));
+        }else {
+            kiosk.setStatusDevice(StatusDevice.OK);
+            kiosk.setErrorMessage(String.format("%s. Принтер работает нормально", dateFormat.format(new Date())));
+        }
+        kioskRepo.save(kiosk);
 
         KioskMenu kioskMenuQueue = queue.getKioskMenu(); //Старшее меню очереди
         //Проверим наличие входящего меню в меню очереди
@@ -114,12 +136,16 @@ public class KioskServiceIMPL implements KioskService {
                 ServiceList serviceList = new ServiceList();
                 serviceList.setType("YESNO");
                 serviceList.setIdMenu(id);
+                serviceList.setIdBSService(getBsService().getId());
                 return serviceList;
             }
             if (kioskMenuInput.getTypeButton() == TypeButton.PRINT) {
                 return createTalon(key, id, "-");
             }
         }else {
+            if (getBsService()!= null && getBsService().getId().equals(id)) {
+                return createTalon(key, id, "-");
+            }
             return getServiceListByMenuList(kioskMenuQueue);
         }
         return new ServiceList("Произошла ошибка");
@@ -128,8 +154,16 @@ public class KioskServiceIMPL implements KioskService {
     private ServiceList createTalon(String key, Long id, String yesNo) {
         Kiosk kiosk = kioskRepo.findByIP(key);
         Queue queue = kiosk.getQueue();
-        KioskMenu kioskMenu = kioskMenuRepo.getOne(id);
-        TicketService ticketService = kioskMenu.getTicketService();
+        TicketService ticketService;
+        KioskMenu kioskMenu = null;
+        if (getBsService()!= null && getBsService().getId().equals(id)) {
+            ticketService = ticketServiceRepo.getOne(id);
+            yesNo = "-";
+        }else {
+            kioskMenu = kioskMenuRepo.getOne(id);
+            ticketService = kioskMenu.getTicketService();
+        }
+
         if (!yesNo.equals("-")) {
             if (yesNo.equals("no")) ticketService = kioskMenu.getTicketService2();
         }
@@ -137,19 +171,21 @@ public class KioskServiceIMPL implements KioskService {
         Printer printer = printService.getPrinter(kiosk);
 
         ServiceList serviceList = new ServiceList();
-        if (printer.isWorking()) {
+        if (printer.isWorking() || kiosk.isTest()) {
             Ticket ticket = creatorTicket.createTicket(ticketService, queue);
             PrintJob printJob = printService.createPrintJob(ticket.getName());
             printTemplate(printJob, ticket);
-            printJob = printer.newJob(printJob);
+            if (!kiosk.isTest())
+                printJob = printer.newJob(printJob);
             ticket.setPrintJobID(printJob.getNumber());
-            if (printJob.getStatusJob() == StatusJob.WAIT || printJob.getStatusJob() == StatusJob.PRINTING) {
+            if (printJob.getStatusJob() == StatusJob.WAIT || printJob.getStatusJob() == StatusJob.PRINTING || kiosk.isTest()) {
                 serviceList.setType("Print");
                 serviceList.setMessage(printJob.getNumber().toString());
                 ticket.setStatus(TicketStatus.PRINTING);
             }else {
                 serviceList.setType("Error");
                 ticket.setStatus(TicketStatus.ERROR_PRINT);
+                ticket.setDatePrinted(new Date());
             }
             ticketRepo.save(ticket);
         } else {
@@ -165,6 +201,12 @@ public class KioskServiceIMPL implements KioskService {
         Kiosk kiosk = kioskRepo.findByIP(key);
         Ticket ticket = ticketRepo.getTicketByPrintJobID(id);
         StatusJobPrinted statusJobPrinted = new StatusJobPrinted();
+
+        if (kiosk.isTest()) {
+            statusJobPrinted.setPrinted("ok");
+            return statusJobPrinted;
+        }
+
         StatusJob statusJob = printService.getStatusJob(kiosk, id);
         String result = "";
         if (statusJob == StatusJob.WAIT || statusJob == StatusJob.PRINTING){
@@ -174,10 +216,12 @@ public class KioskServiceIMPL implements KioskService {
         if (statusJob == StatusJob.COMPLETE){
             result = "ok";
             ticket.setStatus(TicketStatus.QUEUE);
+            ticket.setDatePrinted(new Date());
         }
         else{
             result = "error";
             ticket.setStatus(TicketStatus.ERROR_PRINT);
+            ticket.setDatePrinted(new Date());
         }
         ticketRepo.save(ticket);
         statusJobPrinted.setPrinted(result);
@@ -196,17 +240,34 @@ public class KioskServiceIMPL implements KioskService {
                     .addContent(ticket.getName().getBytes("windows-1251"))
                     .addContent(printService.getPrintAndFeedLines(2))
                     .addContent(printService.getKegel(0, 0))
-                    .addContent(printService.getAlign(0))
-                    .addContent("Перечень документов, необходимых на оформлении:".getBytes("windows-1251"))
-                    .addContent(printService.getPrintAndNewLine())
-                    .addContent("1. Доверенность на получение/сдачу груза.".getBytes("windows-1251"))
-                    .addContent(printService.getPrintAndNewLine())
-                    .addContent("2. Документ удостоверяющий личность, согласно доверенности".getBytes("windows-1251"))
-                    .addContent(printService.getPrintAndNewLine())
-                    .addContent("3. Сопроводительные документы на груз при отправлении от Юр. лица.".getBytes("windows-1251"))
-                    .addContent(printService.getPrintAndNewLine())
-                    .addContent(printService.getAlign(1))
-                    .addContent("Поестителей перед вами: ZzZ".getBytes("windows-1251"))
+                    .addContent(printService.getAlign(0));
+            if (ticket.getService().getTypeStr() == TypeService.SHIPMENT) {
+                printJob.addContent("Перечень документов, необходимых на оформлении:".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("1. Документ удостоверяющий личность.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("2. Сопроводительные документы на груз при отправлении от Юр. лица.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine());
+            }else if (ticket.getService().getTypeStr() == TypeService.RECEPTION) {
+                printJob.addContent("Перечень документов, необходимых на оформлении:".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("1. Доверенность на получение груза.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("2. Документ удостоверяющий личность, согласно доверенности.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine());
+            }else { //if (ticket.getService().getTypeStr() == TypeService.SHIPandRECEP) {
+                printJob.addContent("Перечень документов, необходимых на оформлении:".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("1. Доверенность на получение/сдачу груза.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("2. Документ удостоверяющий личность, согласно доверенности.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine())
+                        .addContent("3. Сопроводительные документы на груз при отправлении от Юр. лица.".getBytes("windows-1251"))
+                        .addContent(printService.getPrintAndNewLine());
+            }
+
+            printJob.addContent(printService.getAlign(1))
+                    .addContent(("Посетителей перед вами: " + getClientBeforeClient(ticket)).getBytes("windows-1251"))
                     .addContent(printService.getPrintAndFeedLines(5))
                     .addContent(printService.getCutPaper());
         } catch (UnsupportedEncodingException e) {
@@ -215,11 +276,21 @@ public class KioskServiceIMPL implements KioskService {
 
     }
 
+    private int getClientBeforeClient(Ticket ticket) {
+        List<Ticket> tickets = ticketRepo.findAllInQueueByQueue(ticket.getQueue().getId(), ticket.getId());
+        for (int i = 0; i < tickets.size(); i++) {
+            if (ticket.getId().equals(tickets.get(i).getId()))
+                return i;
+        }
+        return tickets.size();
+    }
+
     private ServiceList getServiceListByMenuList(KioskMenu kioskMenu) {
         ServiceList serviceList = new ServiceList();
         serviceList.setType("List");
         for (KioskMenu kioskMenuF : kioskMenu.getUnderKioskMenu())
             serviceList.getList().add(new MenuUnitService(kioskMenuF));
+        serviceList.setIdBSService(getBsService() == null ? null : getBsService().getId());
         return serviceList;
     }
 
@@ -230,6 +301,14 @@ public class KioskServiceIMPL implements KioskService {
         kiosk.setName("Незарегистрированное устройство");
         kioskRepo.save(kiosk);
         return kioskRepo.findByIP(key);
+    }
+
+    private TicketService getBsService() {
+        if (bsService == null) {
+            bsService = ticketServiceRepo.getFirstByBSService(true);
+        }
+
+        return bsService;
     }
 
     private KioskUI createKioskUIByKiosk(Kiosk kiosk) {

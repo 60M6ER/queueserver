@@ -4,15 +4,16 @@ import com.baikalsr.queueserver.UI.MenuUI;
 import com.baikalsr.queueserver.UI.editorImpl.TicketCreatorUI;
 import com.baikalsr.queueserver.entity.*;
 import com.baikalsr.queueserver.repository.*;
-import com.baikalsr.queueserver.service.CreatorTicket;
-import com.baikalsr.queueserver.service.SecurityService;
-import com.baikalsr.queueserver.service.StatusManager;
-import com.baikalsr.queueserver.service.TicketDistribution;
+import com.baikalsr.queueserver.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -32,6 +33,12 @@ public class WebController {
     private KioskMenuRepo kioskMenuRepo;
     @Autowired
     private TicketDistribution ticketDistribution;
+    @Autowired
+    private TabloRepo tabloRepo;
+    @Autowired
+    private RunLineTextRepo runLineTextRepo;
+    @Autowired
+    private SettingsProgramService settingsProgramService;
 
     //Обеспечание шапки страниц
     @Autowired
@@ -41,20 +48,23 @@ public class WebController {
     private SecurityService securityService;
     @Autowired
     private StatusManager statusManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @ModelAttribute("statusManager")
-    public String getStatusManager() {
-        return statusManager.statusToString(statusManager.getStatusManager(securityService.getUsername()));
-    }
 
     @ModelAttribute("menuUI")
-    public MenuUI getMenuUI() {
-        return menuUI;
+    public ArrayList<HashMap<String, Object>> getMenuUI() {
+        return menuUI.getMenuStructByRoles();
     }
 
     @ModelAttribute("nameUser")
     public String getUserName() {
         return securityService.getNameUser();
+    }
+
+    @ModelAttribute("userID")
+    public String getUserID() {
+        return securityService.getUsername();
     }
 
     @ModelAttribute("securityService")
@@ -69,8 +79,14 @@ public class WebController {
         model.addAttribute("queues", queueRepo.findAll());
         model.addAttribute("services", ticketServiceRepo.findAll());
         model.addAttribute("messageCreate", "");
-        model.addAttribute("tickets", ticketDistribution.getListTickets());
+        //model.addAttribute("tickets", ticketDistribution.getListTickets());
         return "index";
+    }
+
+    @GetMapping("/tablo")
+    public String tablo(Model model){
+
+        return "tablo";
     }
 
     @RequestMapping("/settings")
@@ -84,6 +100,11 @@ public class WebController {
             if (currentSet.equals("Kiosks")) {
                 List<Kiosk> kiosks = kioskRepo.findAll();
                 model.addAttribute("Kiosks", kiosks);
+                model.addAttribute("currentSet", currentSet);
+            }
+            if (currentSet.equals("Tablos")) {
+                List<Tablo> tablos = tabloRepo.findAll();
+                model.addAttribute("tablos", tablos);
                 model.addAttribute("currentSet", currentSet);
             }
             if (currentSet.equals("KiosksMenu")) {
@@ -101,8 +122,29 @@ public class WebController {
                 model.addAttribute("services", services);
                 model.addAttribute("currentSet", currentSet);
             }
+            if (currentSet.equals("RunLine")) {
+                List<RunLineText> runLineTexts = runLineTextRepo.findAll();
+                model.addAttribute("runLines", runLineTexts);
+                model.addAttribute("currentSet", currentSet);
+            }
+            if (currentSet.equals("SettingProgram")) {
+                model.addAttribute("hours", settingsProgramService.getHoursWorkingTime());
+                model.addAttribute("currentSet", currentSet);
+            }
         }
         return "settings";
+    }
+
+    @GetMapping("/administration")
+    public String administration(Model model){
+
+        return "administration";
+    }
+
+    @GetMapping("/reports")
+    public String reports(Model model){
+
+        return "reports";
     }
 
     @RequestMapping(value = "/createTicket", params = {"create"}, method = RequestMethod.POST)
