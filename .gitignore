@@ -1,2 +1,7 @@
-
-PrintService/PrintService.iml
+# Default ignored files
+.idea
+*.iws
+*.iml
+*.ipr
+/out
+/target
