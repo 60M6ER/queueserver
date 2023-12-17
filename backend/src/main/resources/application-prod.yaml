@@ -1,0 +1,12 @@
+server:
+  port: ${SPRING_PORT}
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${SPRING_DB_URL}/${SPRING_DB_NAME}
+    username: ${SPRING_DB_USER}
+    password: ${SPRING_DB_PASSWORD}
+  jpa:
+    show-sql: false
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml

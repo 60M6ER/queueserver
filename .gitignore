@@ -5,3 +5,10 @@
 *.ipr
 /out
 /target
+backend/.mvn/
+
+backend/compose.yaml
+
+backend/mvnw
+
+backend/mvnw.cmd
